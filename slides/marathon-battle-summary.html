@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marathon — Battle Summary</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-snap-type: y mandatory; overflow-y: scroll; scroll-behavior: smooth; }
+body { font-family: 'Source Sans 3', sans-serif; background: #111b30; color: #faf8f2; }
+
+/* ===== SLIDE CORE ===== */
+.slide {
+  width: 100vw; height: 100vh;
+  scroll-snap-align: start;
+  position: relative; overflow: hidden;
+  display: flex;
+}
+
+/* ===== TITLE SLIDE ===== */
+.slide--title {
+  justify-content: center; align-items: center; text-align: center;
+}
+.slide--title .bg { position: absolute; inset: 0; }
+.slide--title .bg img { width: 100%; height: 100%; object-fit: cover; }
+.slide--title .bg::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(17,27,48,0.45) 0%, rgba(17,27,48,0.88) 100%);
+}
+.slide--title .content { position: relative; z-index: 2; max-width: 72vw; }
+.slide--title h1 {
+  font-family: 'Playfair Display', serif; font-weight: 900;
+  font-size: clamp(3rem, 6vw, 6rem); color: #c9a84c;
+  line-height: 1.05; margin-bottom: 0.3em;
+}
+.slide--title .subtitle {
+  font-size: clamp(1.2rem, 2.4vw, 2rem); font-weight: 300; color: #faf8f2;
+}
+
+/* ===== BATTLE DIAGRAM SLIDE (image prominent + caption) ===== */
+.slide--diagram {
+  flex-direction: column; justify-content: center; align-items: center;
+  background: #111b30; padding: clamp(0.5rem, 1.5vw, 2rem);
+}
+.slide--diagram .phase-label {
+  font-family: 'Playfair Display', serif; font-weight: 700;
+  font-size: clamp(1rem, 1.6vw, 1.4rem); color: #c9a84c;
+  letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.3em;
+}
+.slide--diagram .img-wrap {
+  flex: 1; display: flex; justify-content: center; align-items: center;
+  width: 100%;
+}
+.slide--diagram .img-wrap img {
+  max-height: 72vh; max-width: 92vw; object-fit: contain; cursor: pointer;
+}
+.slide--diagram .caption {
+  font-size: clamp(0.9rem, 1.3vw, 1.15rem); font-weight: 300;
+  color: #faf8f2; padding: 0.8em clamp(1rem, 3vw, 4rem) 2rem;
+  text-align: center; max-width: 72ch; line-height: 1.65;
+}
+
+/* ===== END SLIDE (empty / wrap-up) ===== */
+.slide--end {
+  flex-direction: column; justify-content: center; align-items: center;
+  background: #1a2744; text-align: center;
+}
+.slide--end h2 {
+  font-family: 'Playfair Display', serif; font-weight: 900;
+  font-size: clamp(2.2rem, 4.5vw, 4rem); color: #c9a84c;
+  margin-bottom: 0.3em;
+}
+.slide--end .gold-rule-centre {
+  width: 80px; height: 3px; background: #c9a84c; border: none; margin: 0 auto;
+}
+
+/* ===== LIGHTBOX ===== */
+.lightbox {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 9999; display: none;
+  justify-content: center; align-items: center;
+  cursor: zoom-out;
+}
+.lightbox.active { display: flex; }
+.lightbox img { max-width: 92vw; max-height: 92vh; object-fit: contain; }
+
+/* ===== NAV BAR ===== */
+.nav-bar {
+  position: fixed; bottom: 0; left: 0; width: 100%; z-index: 900;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.55rem 1.2rem;
+  background: rgba(17,27,48,0.88); backdrop-filter: blur(8px);
+}
+.nav-bar .counter {
+  font-size: clamp(0.78rem, 1vw, 0.95rem); color: #faf8f2aa;
+  font-weight: 400; min-width: 5ch; text-align: center;
+}
+.progress-track {
+  flex: 1; height: 3px; background: rgba(250,248,242,0.15);
+  margin: 0 1rem; border-radius: 2px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: #c9a84c; width: 0%;
+  transition: width 0.35s ease;
+}
+.nav-btn {
+  background: none; border: 1px solid rgba(201,168,76,0.4);
+  color: #c9a84c; padding: 0.32rem 0.85rem; border-radius: 4px;
+  cursor: pointer; font-size: clamp(0.75rem, 1vw, 0.92rem);
+  font-family: 'Source Sans 3', sans-serif; transition: background 0.2s;
+}
+.nav-btn:hover { background: rgba(201,168,76,0.15); }
+
+/* ===== HELP OVERLAY ===== */
+.help-overlay {
+  position: fixed; inset: 0;
+  background: rgba(17,27,48,0.93);
+  z-index: 9998; display: none;
+  justify-content: center; align-items: center;
+}
+.help-overlay.active { display: flex; }
+.help-box {
+  background: #1a2744; border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 10px; padding: clamp(1.5rem, 3vw, 3rem);
+  max-width: 420px; width: 90vw;
+}
+.help-box h3 {
+  font-family: 'Playfair Display', serif; color: #c9a84c;
+  font-size: clamp(1.2rem, 2vw, 1.6rem); margin-bottom: 1em;
+}
+.help-box dl {
+  display: grid; grid-template-columns: auto 1fr; gap: 0.55em 1.2em;
+}
+.help-box dt {
+  font-weight: 600; color: #c9a84c;
+  font-size: clamp(0.85rem, 1vw, 1rem);
+}
+.help-box dd {
+  font-weight: 300; color: #faf8f2cc;
+  font-size: clamp(0.85rem, 1vw, 1rem);
+}
+
+/* ===== ANIMATIONS ===== */
+.anim {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.anim.visible { opacity: 1; transform: translateY(0); }
+.anim-d1 { transition-delay: 0.15s; }
+.anim-d2 { transition-delay: 0.30s; }
+.anim-d3 { transition-delay: 0.45s; }
+.back-link {
+  position: fixed;
+  top: 1rem;
+  left: 1.5rem;
+  z-index: 1000;
+  color: var(--gold, #c9a84c);
+  text-decoration: none;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.85rem;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.back-link:hover { opacity: 1; }
+</style>
+</head>
+<body>
+<a href="../persian-wars-first-invasion.html" class="back-link">&#8592; Back to site</a>
+
+<!-- ======== SLIDE 1 — Title ======== -->
+<section class="slide slide--title" id="slide-1">
+  <div class="bg"><img src="marathon-battle-summary-assets/image1.jpeg" alt="Battle of Marathon"></div>
+  <div class="content">
+    <h1 class="anim">Marathon</h1>
+    <p class="subtitle anim anim-d1">Battle Summary</p>
+  </div>
+</section>
+
+<!-- ======== SLIDE 2 — Battle Phase 1: Formation ======== -->
+<section class="slide slide--diagram" id="slide-2">
+  <p class="phase-label anim">Phase 1 &mdash; Formation</p>
+  <div class="img-wrap">
+    <img src="marathon-battle-summary-assets/image3.png" alt="Battle of Marathon — formation diagram" class="clickable-img anim anim-d1">
+  </div>
+  <p class="caption anim anim-d2">The Athenians were drawn up in formation: on the left wing were the Plataeans, Callimachus commanded the right wing while Miltiades took control of the "thinner lines" of the centre.</p>
+</section>
+
+<!-- ======== SLIDE 3 — Battle Phase 2: The Charge ======== -->
+<section class="slide slide--diagram" id="slide-3">
+  <p class="phase-label anim">Phase 2 &mdash; The Charge</p>
+  <div class="img-wrap">
+    <img src="marathon-battle-summary-assets/image4.png" alt="Battle of Marathon — the charge" class="clickable-img anim anim-d1">
+  </div>
+  <p class="caption anim anim-d2">The Athenians charged at double speed.</p>
+</section>
+
+<!-- ======== SLIDE 4 — Battle Phase 3: Wings Hold ======== -->
+<section class="slide slide--diagram" id="slide-4">
+  <p class="phase-label anim">Phase 3 &mdash; Wings Hold</p>
+  <div class="img-wrap">
+    <img src="marathon-battle-summary-assets/image5.png" alt="Battle of Marathon — wings hold firm" class="clickable-img anim anim-d1">
+  </div>
+  <p class="caption anim anim-d2">The Athenians' weaker centre was pushed back but the wings held firm. The Persian wings fled to their ships.</p>
+</section>
+
+<!-- ======== SLIDE 5 — Battle Phase 4: The Rout ======== -->
+<section class="slide slide--diagram" id="slide-5">
+  <p class="phase-label anim">Phase 4 &mdash; The Rout</p>
+  <div class="img-wrap">
+    <img src="marathon-battle-summary-assets/image6.png" alt="Battle of Marathon — the rout" class="clickable-img anim anim-d1">
+  </div>
+  <p class="caption anim anim-d2">As the Persian centre pushed deeper into the Athenian centre, they became surrounded and trapped by the Athenian wings. The Persian forces were routed. The Athenians pursued the other Persians back to their ships and managed to capture seven ships. The Persian fleet sailed south to Athens and anchored off Phaleron. The Athenians quickly marched south and took up a position on Mt Lycabettus. After a short time, the Persians returned home.</p>
+</section>
+
+<!-- ======== SLIDE 6 — End ======== -->
+<section class="slide slide--end" id="slide-6">
+  <h2 class="anim">End of Summary</h2>
+  <hr class="gold-rule-centre anim anim-d1">
+</section>
+
+<!-- ======== LIGHTBOX ======== -->
+<div class="lightbox" id="lightbox"><img src="" alt="Enlarged view"></div>
+
+<!-- ======== NAV BAR ======== -->
+<nav class="nav-bar">
+  <button class="nav-btn" id="prevBtn" aria-label="Previous slide">&#8592; Prev</button>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <span class="counter" id="counter">1 / 6</span>
+  <button class="nav-btn" id="nextBtn" aria-label="Next slide">Next &#8594;</button>
+</nav>
+
+<!-- ======== HELP OVERLAY ======== -->
+<div class="help-overlay" id="helpOverlay">
+  <div class="help-box">
+    <h3>Keyboard Shortcuts</h3>
+    <dl>
+      <dt>&#8592; &#8594;</dt><dd>Navigate between slides</dd>
+      <dt>Space</dt><dd>Next slide</dd>
+      <dt>?</dt><dd>Show / hide this help</dd>
+      <dt>Click image</dt><dd>Zoom to full screen</dd>
+      <dt>Esc</dt><dd>Close zoom or help</dd>
+    </dl>
+  </div>
+</div>
+
+<script>
+(function(){
+  const TOTAL = 6;
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const progressFill = document.getElementById('progressFill');
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = lightbox.querySelector('img');
+  const helpOverlay = document.getElementById('helpOverlay');
+
+  let current = 0;
+
+  function goTo(i){
+    i = Math.max(0, Math.min(TOTAL - 1, i));
+    slides[i].scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function updateUI(idx){
+    current = idx;
+    counter.textContent = (idx + 1) + ' / ' + TOTAL;
+    progressFill.style.width = ((idx + 1) / TOTAL * 100) + '%';
+  }
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        const idx = Array.from(slides).indexOf(e.target);
+        updateUI(idx);
+        e.target.querySelectorAll('.anim').forEach(el => el.classList.add('visible'));
+      }
+    });
+  }, { threshold: 0.5 });
+  slides.forEach(s => obs.observe(s));
+
+  document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1));
+  document.getElementById('nextBtn').addEventListener('click', () => goTo(current + 1));
+
+  document.addEventListener('keydown', e => {
+    if(lightbox.classList.contains('active')){
+      if(e.key === 'Escape') lightbox.classList.remove('active');
+      return;
+    }
+    if(helpOverlay.classList.contains('active')){
+      if(e.key === 'Escape' || e.key === '?') helpOverlay.classList.remove('active');
+      return;
+    }
+    switch(e.key){
+      case 'ArrowRight': case 'ArrowDown': case ' ':
+        e.preventDefault(); goTo(current + 1); break;
+      case 'ArrowLeft': case 'ArrowUp':
+        e.preventDefault(); goTo(current - 1); break;
+      case '?':
+        helpOverlay.classList.toggle('active'); break;
+    }
+  });
+
+  document.querySelectorAll('.clickable-img').forEach(img => {
+    img.style.cursor = 'pointer';
+    img.addEventListener('click', () => {
+      lbImg.src = img.src;
+      lbImg.alt = img.alt;
+      lightbox.classList.add('active');
+    });
+  });
+  lightbox.addEventListener('click', () => lightbox.classList.remove('active'));
+
+  helpOverlay.addEventListener('click', e => {
+    if(e.target === helpOverlay) helpOverlay.classList.remove('active');
+  });
+
+  updateUI(0);
+  slides[0].querySelectorAll('.anim').forEach(el => el.classList.add('visible'));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Delian League — Origins</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --navy: #1a2744;
+  --gold: #c9a84c;
+  --cream: #faf8f2;
+  --dark-navy: #111b30;
+  --gold-dim: rgba(201,168,76,0.25);
+}
+
+html { scroll-behavior: smooth; overflow: hidden; }
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--dark-navy);
+  color: var(--cream);
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* ── Slide Container ── */
+.deck { position: relative; height: 100vh; overflow: hidden; }
+
+.slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100vh;
+  display: none;
+  overflow: hidden;
+}
+.slide.active { display: flex; }
+
+/* ── Typography ── */
+h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+/* ── Progress Bar ── */
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 4px;
+  background: var(--gold); z-index: 1000;
+  transition: width 0.4s ease;
+}
+
+/* ── Slide Counter ── */
+.slide-counter {
+  position: fixed; bottom: clamp(12px, 2vh, 24px); right: clamp(16px, 2vw, 32px);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: clamp(11px, 1.2vw, 15px);
+  color: var(--gold); z-index: 1000;
+  letter-spacing: 0.12em; font-weight: 600;
+  opacity: 0.85;
+}
+
+/* ── Animations ── */
+.anim { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.anim.visible { opacity: 1; transform: translateY(0); }
+.anim-delay-1 { transition-delay: 0.15s; }
+.anim-delay-2 { transition-delay: 0.3s; }
+.anim-delay-3 { transition-delay: 0.45s; }
+.anim-delay-4 { transition-delay: 0.6s; }
+
+/* ══════════════════════════════════
+   LAYOUT: Title Slide
+   ══════════════════════════════════ */
+.slide-title {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.slide-title::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(17,27,48,0.55) 0%, rgba(17,27,48,0.82) 60%, rgba(17,27,48,0.95) 100%);
+  z-index: 1;
+}
+.slide-title .title-content {
+  position: relative; z-index: 2;
+  max-width: 80%;
+}
+.slide-title h1 {
+  font-size: clamp(2.4rem, 5.5vw, 5rem);
+  font-weight: 900;
+  color: var(--cream);
+  line-height: 1.1;
+  margin-bottom: clamp(8px, 1.5vh, 20px);
+  letter-spacing: -0.01em;
+}
+.slide-title .subtitle {
+  font-size: clamp(1rem, 2vw, 1.6rem);
+  color: var(--gold);
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.slide-title .credit {
+  font-size: clamp(0.55rem, 0.8vw, 0.75rem);
+  color: rgba(250,248,242,0.35);
+  margin-top: clamp(20px, 4vh, 50px);
+  font-weight: 300;
+}
+
+/* ══════════════════════════════════
+   LAYOUT: Section Title
+   ══════════════════════════════════ */
+.slide-section-title {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.slide-section-title::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(17,27,48,0.5) 0%, rgba(17,27,48,0.85) 100%);
+  z-index: 1;
+}
+.slide-section-title .title-content {
+  position: relative; z-index: 2;
+  max-width: 75%;
+}
+.slide-section-title h2 {
+  font-size: clamp(2rem, 4.5vw, 4rem);
+  font-weight: 900;
+  color: var(--cream);
+  line-height: 1.15;
+}
+
+/* ══════════════════════════════════
+   LAYOUT: 50/50 Editorial Split
+   ══════════════════════════════════ */
+.slide-split {
+  flex-direction: row;
+}
+.slide-split.img-right {
+  flex-direction: row-reverse;
+}
+.slide-split .split-image {
+  width: 50%;
+  height: 100vh;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.slide-split .split-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  cursor: zoom-in;
+}
+.slide-split .split-text {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(24px, 4vw, 72px) clamp(28px, 4.5vw, 80px);
+  background: var(--navy);
+}
+.slide-split .split-text h2 {
+  font-size: clamp(1.4rem, 2.8vw, 2.6rem);
+  font-weight: 900;
+  color: var(--gold);
+  margin-bottom: clamp(10px, 1.8vh, 24px);
+  line-height: 1.15;
+}
+.slide-split .split-text p {
+  font-size: clamp(0.8rem, 1.35vw, 1.15rem);
+  line-height: 1.65;
+  color: var(--cream);
+  margin-bottom: clamp(6px, 1vh, 14px);
+  font-weight: 300;
+}
+.slide-split .split-text p strong {
+  font-weight: 600;
+  color: var(--gold);
+}
+
+/* ══════════════════════════════════
+   LAYOUT: Text-Heavy (Navy bg)
+   ══════════════════════════════════ */
+.slide-text {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var(--navy);
+  padding: clamp(28px, 5vw, 80px) clamp(40px, 8vw, 160px);
+}
+.slide-text h2 {
+  font-size: clamp(1.6rem, 3vw, 2.8rem);
+  font-weight: 900;
+  color: var(--gold);
+  margin-bottom: clamp(14px, 2.5vh, 32px);
+  text-align: center;
+  line-height: 1.2;
+}
+.slide-text .text-body {
+  max-width: 900px;
+  width: 100%;
+}
+.slide-text p {
+  font-size: clamp(0.82rem, 1.3vw, 1.12rem);
+  line-height: 1.7;
+  color: var(--cream);
+  margin-bottom: clamp(8px, 1.2vh, 16px);
+  font-weight: 300;
+}
+.slide-text p strong {
+  font-weight: 600;
+  color: var(--gold);
+}
+.slide-text ul {
+  list-style: none;
+  padding: 0;
+  margin-top: clamp(4px, 0.5vh, 8px);
+}
+.slide-text ul li {
+  font-size: clamp(0.82rem, 1.3vw, 1.12rem);
+  line-height: 1.7;
+  color: var(--cream);
+  margin-bottom: clamp(6px, 1vh, 12px);
+  padding-left: clamp(16px, 1.5vw, 24px);
+  position: relative;
+  font-weight: 300;
+}
+.slide-text ul li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: clamp(8px, 0.7vw, 11px);
+  width: clamp(5px, 0.5vw, 8px);
+  height: clamp(5px, 0.5vw, 8px);
+  background: var(--gold);
+  border-radius: 50%;
+}
+
+/* ══════════════════════════════════
+   LAYOUT: Quote Slide
+   ══════════════════════════════════ */
+.slide-quote {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var(--dark-navy);
+  padding: clamp(28px, 5vw, 80px) clamp(40px, 8vw, 160px);
+  text-align: center;
+}
+.slide-quote .quote-block {
+  max-width: 850px;
+  position: relative;
+}
+.slide-quote .quote-mark {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3rem, 7vw, 7rem);
+  color: var(--gold);
+  line-height: 1;
+  opacity: 0.6;
+  position: absolute;
+  top: clamp(-30px, -4vh, -50px);
+  left: clamp(-20px, -2vw, -40px);
+}
+.slide-quote blockquote {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(0.95rem, 1.6vw, 1.5rem);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--cream);
+  line-height: 1.55;
+  margin-bottom: clamp(14px, 2.5vh, 30px);
+}
+.slide-quote .attribution {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: clamp(0.7rem, 1vw, 0.95rem);
+  color: var(--gold);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+}
+
+/* Long quote variant */
+.slide-quote.long-quote blockquote {
+  font-size: clamp(0.82rem, 1.25vw, 1.2rem);
+  line-height: 1.6;
+}
+.slide-quote.long-quote .quote-block {
+  max-width: 920px;
+}
+
+/* ══════════════════════════════════
+   LAYOUT: Full-Image Slide
+   ══════════════════════════════════ */
+.slide-full-image {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var(--dark-navy);
+  padding: clamp(16px, 2vh, 30px);
+}
+.slide-full-image .image-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+}
+.slide-full-image .image-wrapper img {
+  max-width: 92%;
+  max-height: 82vh;
+  object-fit: contain;
+  cursor: zoom-in;
+}
+.slide-full-image .caption {
+  font-size: clamp(0.7rem, 1vw, 0.9rem);
+  color: rgba(250,248,242,0.5);
+  text-align: center;
+  margin-top: clamp(6px, 1vh, 14px);
+  font-weight: 300;
+}
+
+/* ══════════════════════════════════
+   Lightbox
+   ══════════════════════════════════ */
+.lightbox {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 9999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  cursor: zoom-out;
+}
+.lightbox.active { display: flex; }
+.lightbox img {
+  max-width: 92vw;
+  max-height: 92vh;
+  object-fit: contain;
+}
+
+/* ══════════════════════════════════
+   Help Overlay
+   ══════════════════════════════════ */
+.help-overlay {
+  position: fixed; inset: 0;
+  background: rgba(17,27,48,0.95);
+  z-index: 9998;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.help-overlay.active { display: flex; }
+.help-overlay h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  color: var(--gold);
+  margin-bottom: clamp(16px, 3vh, 32px);
+}
+.help-overlay .keys {
+  display: flex; flex-direction: column; gap: clamp(8px, 1.2vh, 14px);
+}
+.help-overlay .key-row {
+  display: flex; align-items: center; gap: clamp(10px, 1.5vw, 20px);
+  font-size: clamp(0.85rem, 1.2vw, 1.1rem);
+  color: var(--cream);
+}
+.help-overlay kbd {
+  background: var(--navy);
+  border: 1px solid var(--gold);
+  border-radius: 4px;
+  padding: clamp(3px, 0.4vh, 6px) clamp(8px, 0.8vw, 14px);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: clamp(0.75rem, 1vw, 0.95rem);
+  color: var(--gold);
+  min-width: 40px;
+  text-align: center;
+}
+.back-link {
+  position: fixed;
+  top: 1rem;
+  left: 1.5rem;
+  z-index: 1000;
+  color: var(--gold, #c9a84c);
+  text-decoration: none;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.85rem;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.back-link:hover { opacity: 1; }
+</style>
+</head>
+<body>
+<a href="../athenian-empire-delian-league.html" class="back-link">&#8592; Back to site</a>
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-counter" id="slideCounter"></div>
+
+<div class="deck" id="deck">
+
+<!-- SLIDE 1 — Title -->
+<div class="slide slide-title active" style="background-image: url('delian-league-origins-assets/image3.png');">
+  <div class="title-content">
+    <h1 class="anim">The Delian League</h1>
+    <div class="subtitle anim anim-delay-1">Greece 500 – 440 BC</div>
+    <div class="credit anim anim-delay-2">Photo by Unknown Author — licensed under CC BY-SA</div>
+  </div>
+</div>
+
+<!-- SLIDE 2 — Section Title -->
+<div class="slide slide-section-title" style="background-image: url('delian-league-origins-assets/image4.jpg');">
+  <div class="title-content">
+    <h2 class="anim">The Origins of The Delian League</h2>
+  </div>
+</div>
+
+<!-- SLIDE 3 — Split: image left -->
+<div class="slide slide-split">
+  <div class="split-image">
+    <img src="delian-league-origins-assets/image6.png" alt="Map of Athens and allies">
+  </div>
+  <div class="split-text">
+    <h2 class="anim">'Athens and her allies' — the formation of the Delian League</h2>
+    <p class="anim anim-delay-1">Although Sparta had successfully led the Greek forces to victory against the Persians in 480–479 BC, it was Athens who emerged as the greatest power in Greece in the next decade.</p>
+    <p class="anim anim-delay-2">Athens became the leader or <strong>hegemon</strong> of a league of naval states called 'The Athenians and their Allies'. A modern term used by historians for this organisation is the <strong>'Delian League'</strong> or 'Confederacy of Delos'.</p>
+    <p class="anim anim-delay-3">The members of the Delian League continued the war against Persia in the Aegean Sea and along the coasts of Asia Minor.</p>
+  </div>
+</div>
+
+<!-- SLIDE 4 — Text-Heavy: Spartan reluctance -->
+<div class="slide slide-text">
+  <h2 class="anim">Spartan Reluctance to Continue the War Against Persia</h2>
+  <div class="text-body">
+    <p class="anim anim-delay-1">After the battle of Mycale, the Greek fleet returned to Samos to hold a council of war. Leotychidas, the Spartan leader of the Greek forces, was faced with a problem.</p>
+    <p class="anim anim-delay-2">The Ionian Greeks were deserting the Persians and wanted to join the Spartans' alliance as they couldn't maintain their independence from Persia on their own. They would need continuous help from mainland Greece.</p>
+    <p class="anim anim-delay-3">However, the Spartan and Peloponnesian contingents did not want to spend any more time in the eastern Aegean so far from home. The Spartan commander suggested the Ionians leave their homeland and settle in those states of mainland Greece that had medised (gone over to Persia in the previous war). The Ionians were shocked at this suggestion and the Athenians supported them in their refusal.</p>
+  </div>
+</div>
+
+<!-- SLIDE 5 — Quote: Thucydides -->
+<div class="slide slide-quote">
+  <div class="quote-block anim">
+    <div class="quote-mark">&ldquo;</div>
+    <blockquote>We did not gain this empire by force. It came to us at a time when you were unwilling to fight on to the end against the Persians.</blockquote>
+    <div class="attribution">Thucydides, <em>The Peloponnesian War</em> I. 75</div>
+  </div>
+  <div style="max-width:850px; margin-top: clamp(20px, 3vh, 36px);">
+    <p class="anim anim-delay-1" style="font-size: clamp(0.78rem,1.15vw,1rem); color: var(--cream); line-height:1.65; font-weight:300; text-align:left;">The Spartans reluctantly accepted the Ionians into their alliance of city-states and agreed to sail to the Hellespont to break the bridges of the Persians. When they found the bridges already gone, Leotychidas and the Peloponnesians sailed home.</p>
+    <p class="anim anim-delay-2" style="font-size: clamp(0.78rem,1.15vw,1rem); color: var(--cream); line-height:1.65; font-weight:300; text-align:left;">The Athenians, under the command of Xanthippus, remained in the area to get rid of the Persians from the strategic town of Sestos.</p>
+  </div>
+</div>
+
+<!-- SLIDE 6 — Split: image right (Pausanias) -->
+<div class="slide slide-split img-right">
+  <div class="split-image">
+    <img src="delian-league-origins-assets/image7.gif" alt="Pausanias">
+  </div>
+  <div class="split-text">
+    <h2 class="anim">The Actions of Pausanias</h2>
+    <p class="anim anim-delay-1">In 478 BC the Spartan government put Pausanias in charge of a Greek fleet to free those states still under Persian control. He freed Byzantium at the entrance to the Black Sea but while there began to behave badly towards the Eastern Greek allies.</p>
+    <p class="anim anim-delay-2" style="font-style:italic; color: var(--gold);">&ldquo;He scattered insults far and wide with his officiousness and absurd pretensions.&rdquo;<br><span style="font-style:normal; font-size: clamp(0.65rem,0.9vw,0.85rem); color: rgba(250,248,242,0.6);">Plutarch, <em>Aristides</em> 17</span></p>
+    <p class="anim anim-delay-3">Pausanias' behaviour caused such resentment amongst the Ionians that they asked Athens to take over control. Pausanias was recalled by his own government and replaced by another commanding officer whom the Ionians also rejected. Spartan leadership was no longer acceptable.</p>
+  </div>
+</div>
+
+<!-- SLIDE 7 — Text-Heavy: Spartan unsuitability -->
+<div class="slide slide-text">
+  <h2 class="anim">Spartan Unsuitability to Lead a League of Sea States</h2>
+  <div class="text-body">
+    <p class="anim anim-delay-1">There were many Spartans who were content to give up the leadership in the continuing conflict with the Persians in the east. Why was this the case?</p>
+    <ul>
+      <li class="anim anim-delay-1">They had domestic problems to deal with. There was always the fear that the helots would revolt if the Spartan army spent too much time outside the Peloponnese.</li>
+      <li class="anim anim-delay-2">Sparta also needed to consolidate her position within the Peloponnese where she had powerful enemies such as Argos.</li>
+      <li class="anim anim-delay-3">They were afraid of being disgraced again by high-ranking Spartan officers sent abroad.</li>
+      <li class="anim anim-delay-4">They were a military, land-based, rather than a naval, power.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- SLIDE 8 — Text-Heavy: Athenian suitability -->
+<div class="slide slide-text">
+  <h2 class="anim">Athens — The Obvious Choice</h2>
+  <div class="text-body">
+    <p class="anim anim-delay-1"><strong>The Spartan system also created people with a narrow and rigid attitude.</strong> They tended to be isolationist and inward looking, hardly a suitable outlook for the leader of a widespread organisation.</p>
+    <p class="anim anim-delay-2">The Athenians, who were of Ionian descent, were held in high regard after Salamis and had a large and experienced navy which was essential for leadership of any league of coastal and naval states. They were in a much stronger position now than they had been when they first sent aid to the Ionians during the Ionian Revolt in 499 BC. They were the obvious choice to take up the hegemony (leadership) of the island and coastal states of the Aegean region.</p>
+    <p class="anim anim-delay-3">So, Athens took over the leadership, and the allies, because of their dislike of Pausanias, were happy about this.</p>
+  </div>
+</div>
+
+<!-- SLIDE 9 — Split: image left (Map) -->
+<div class="slide slide-split">
+  <div class="split-image">
+    <img src="delian-league-origins-assets/image5.jpg" alt="Map of original Delian League membership">
+  </div>
+  <div class="split-text">
+    <h2 class="anim">Original Membership</h2>
+    <p class="anim anim-delay-1">Although the number of original members is not known, the area covered by the league in the first year is believed to have extended from Byzantium (north-east) to Aineia (north-west) and from Rhodes (south-east) to Siphnos (south-west).</p>
+  </div>
+</div>
+
+<!-- SLIDE 10 — Text-Heavy: Aims -->
+<div class="slide slide-text">
+  <h2 class="anim">Aims of the Delian League</h2>
+  <div class="text-body">
+    <p class="anim anim-delay-1">Thucydides mentions that one of the objectives of the league was to <strong>'free the Greeks from the Persians'</strong>. This referred to those Greek states in the northern Aegean and Asia Minor which were still under Persian control. Associated with this was the need to protect those towns and cities which had revolted from Persia and those which were to be freed in the near future.</p>
+    <p class="anim anim-delay-2">Thucydides mentions another objective — to <strong>avenge what the Hellenes had suffered</strong> by ravaging (destroying) the 'territory of the King of Persia'.</p>
+  </div>
+</div>
+
+<!-- SLIDE 11 — Long Quote: Anton Powell -->
+<div class="slide slide-quote long-quote">
+  <div class="quote-block anim">
+    <div class="quote-mark">&ldquo;</div>
+    <blockquote>It is worth considering whether their policy of attacking Persian territory by means of the Delian League was intended in part to prevent a recurrence of the great invasion. Persia had, of course, been heavily defeated in 480–479 but she had retained most of her empire, including Egypt, the greater part of Asia Minor, and, indeed, most of the Middle East. A repeated invasion might seem to outsiders, such as Athens and her naval allies, to be a political necessity for the Persians, if they were to prevent discontented subjects in their more remote provinces from drawing subversive conclusions about Persian weaknesses.</blockquote>
+    <div class="attribution">Historian Anton Powell</div>
+  </div>
+</div>
+
+<!-- SLIDE 12 — Text-Heavy: An Athenian Agenda? -->
+<div class="slide slide-text">
+  <h2 class="anim">An Athenian Agenda?</h2>
+  <div class="text-body">
+    <p class="anim anim-delay-1">The three objectives (to free, to protect, to destroy) involved the League members in both <strong>offensive</strong> (attacking) and <strong>defensive</strong> (defending) actions.</p>
+    <p class="anim anim-delay-2">When Thucydides explained that one of the allies' intentions was to ravage the territory of the King of Persia, he used the word <strong>'proskhema'</strong>. This has been translated in a number of ways by recognised historians:</p>
+    <ul>
+      <li class="anim anim-delay-2">&lsquo;professed purpose&rsquo; — R. Meiggs</li>
+      <li class="anim anim-delay-3">&lsquo;announced intention&rsquo; — Gomme</li>
+      <li class="anim anim-delay-3"><strong>&lsquo;pretext&rsquo; — GEM de Ste Croix</strong></li>
+    </ul>
+  </div>
+</div>
+
+<!-- SLIDE 13 — Long Quote: GEM de Ste Croix -->
+<div class="slide slide-quote long-quote">
+  <div class="quote-block anim">
+    <div class="quote-mark">&ldquo;</div>
+    <blockquote>I fancy that his [Thucydides'] choice of the word [proskhema] would have left them [his readers] with the feeling that the talk of revenge through ravaging expeditions was at least partly a cover for ambitious Athenian designs for organising a large, active, powerful and rich alliance under their control.</blockquote>
+    <div class="attribution">GEM de Ste Croix, 1972, <em>The Origins of the Peloponnesian War</em>, Duckworth, p 302</div>
+  </div>
+</div>
+
+<!-- SLIDE 14 — Long Quote: Buckley part 1 -->
+<div class="slide slide-quote long-quote">
+  <div class="quote-block anim">
+    <div class="quote-mark">&ldquo;</div>
+    <blockquote>Certainly, the Athenians and others had suffered severe material loss from the two Persian occupations of 480 and 479, and the prospect of booty from such a wealthy empire as Persia was undoubtedly attractive.<br><br>However, such an aim would have been very limited and short-term for a permanent league &mdash; at some point in the not too distant future the Greeks would have gained the appropriate compensation. This stated aim was probably a very convenient one, upon which all the members could agree, although harbouring different ideas as to what they wanted from the League. The allies, especially the cities on the Asiatic mainland and the neighbouring islands, fresh from deliverance from Persian domination, wanted continued freedom.</blockquote>
+    <div class="attribution">Terry Buckley, 1996, <em>Aspects of Greek History 750–323 BC</em>, Routledge, p 191</div>
+  </div>
+  <p class="anim anim-delay-1" style="max-width:850px; font-size: clamp(0.72rem,1vw,0.9rem); color: rgba(250,248,242,0.5); margin-top: clamp(10px,1.5vh,20px); text-align:left; font-weight:300; line-height:1.5;">In Thucydides' account, Hermokrates of Syracuse states that Athens became leader of willing allies in eastern Greece 'as being a state which intended to punish the Persians.' (Thucydides 1.96.1)</p>
+</div>
+
+<!-- SLIDE 15 — Long Quote: Buckley part 2 -->
+<div class="slide slide-quote long-quote">
+  <div class="quote-block anim">
+    <div class="quote-mark">&ldquo;</div>
+    <blockquote>The allies' freedom from and independence of such a powerful empire as Persia required the existence of a permanent, military league to ensure the maintenance of these objectives. The Athenians for their part, while accepting that the success of the League in creating an effective buffer zone between themselves and Persia would guarantee their liberty, also saw that they would confirm and increase their status as one of the two super-powers in Greece by being the hegemon of a strong naval league.<br><br>The example of the Spartans' dominant influence in Greek affairs due to their leadership of the powerful Peloponnesian League was a great incentive to the Athenians to create something similar, in which they could invest their newly acquired military strength and prestige.</blockquote>
+    <div class="attribution">Terry Buckley, 1996, <em>Aspects of Greek History 750–323 BC</em>, Routledge, p 191</div>
+  </div>
+</div>
+
+</div><!-- end deck -->
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <img src="" alt="Enlarged image" id="lightboxImg">
+</div>
+
+<!-- Help Overlay -->
+<div class="help-overlay" id="helpOverlay">
+  <h3>Keyboard Shortcuts</h3>
+  <div class="keys">
+    <div class="key-row"><kbd>&rarr;</kbd> <span>Next slide</span></div>
+    <div class="key-row"><kbd>&larr;</kbd> <span>Previous slide</span></div>
+    <div class="key-row"><kbd>Space</kbd> <span>Next slide</span></div>
+    <div class="key-row"><kbd>Home</kbd> <span>First slide</span></div>
+    <div class="key-row"><kbd>End</kbd> <span>Last slide</span></div>
+    <div class="key-row"><kbd>Esc</kbd> <span>Close lightbox / help</span></div>
+    <div class="key-row"><kbd>?</kbd> <span>Toggle this help</span></div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  const progressBar = document.getElementById('progressBar');
+  const counter = document.getElementById('slideCounter');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const helpOverlay = document.getElementById('helpOverlay');
+
+  function goTo(n) {
+    if (n < 0 || n >= total) return;
+    slides[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    updateUI();
+    triggerAnimations();
+  }
+
+  function updateUI() {
+    progressBar.style.width = ((current + 1) / total * 100) + '%';
+    counter.textContent = (current + 1) + ' / ' + total;
+  }
+
+  function triggerAnimations() {
+    const els = slides[current].querySelectorAll('.anim');
+    els.forEach(el => el.classList.remove('visible'));
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        els.forEach(el => el.classList.add('visible'));
+      });
+    });
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    // Close lightbox
+    if (lightbox.classList.contains('active')) {
+      if (e.key === 'Escape' || e.key === ' ') { lightbox.classList.remove('active'); e.preventDefault(); return; }
+    }
+    // Close help
+    if (helpOverlay.classList.contains('active')) {
+      if (e.key === 'Escape' || e.key === '?') { helpOverlay.classList.remove('active'); e.preventDefault(); return; }
+    }
+    switch(e.key) {
+      case 'ArrowRight': case ' ': goTo(current + 1); e.preventDefault(); break;
+      case 'ArrowLeft': goTo(current - 1); e.preventDefault(); break;
+      case 'Home': goTo(0); e.preventDefault(); break;
+      case 'End': goTo(total - 1); e.preventDefault(); break;
+      case '?': helpOverlay.classList.toggle('active'); e.preventDefault(); break;
+      case 'Escape': break;
+    }
+  });
+
+  // Lightbox: click images
+  document.querySelectorAll('.split-image img, .slide-full-image .image-wrapper img').forEach(img => {
+    img.addEventListener('click', function() {
+      lightboxImg.src = this.src;
+      lightbox.classList.add('active');
+    });
+  });
+  lightbox.addEventListener('click', function() {
+    lightbox.classList.remove('active');
+  });
+
+  // Init
+  updateUI();
+  triggerAnimations();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greek vs Persian — Armies and Equipment</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-snap-type: y mandatory; overflow-y: scroll; scroll-behavior: smooth; }
+body { font-family: 'Source Sans 3', sans-serif; background: #111b30; color: #faf8f2; }
+
+/* ===== SLIDE CORE ===== */
+.slide {
+  width: 100vw; height: 100vh;
+  scroll-snap-align: start;
+  position: relative; overflow: hidden;
+  display: flex;
+}
+
+/* ===== TITLE SLIDE ===== */
+.slide--title {
+  justify-content: center; align-items: center; text-align: center;
+}
+.slide--title .bg { position: absolute; inset: 0; }
+.slide--title .bg img { width: 100%; height: 100%; object-fit: cover; }
+.slide--title .bg::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(17,27,48,0.50) 0%, rgba(17,27,48,0.88) 100%);
+}
+.slide--title .content { position: relative; z-index: 2; max-width: 72vw; }
+.slide--title h1 {
+  font-family: 'Playfair Display', serif; font-weight: 900;
+  font-size: clamp(2.8rem, 5.5vw, 5.4rem); color: #c9a84c;
+  line-height: 1.08; margin-bottom: 0.35em;
+}
+.slide--title .subtitle {
+  font-size: clamp(1.1rem, 2.2vw, 1.9rem); font-weight: 300; color: #faf8f2;
+}
+
+/* ===== EDITORIAL 50/50 ===== */
+.slide--editorial { display: flex; }
+.slide--editorial .img-half {
+  flex: 0 0 50%; height: 100vh; overflow: hidden;
+}
+.slide--editorial .img-half img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.slide--editorial .text-half {
+  flex: 0 0 50%; display: flex; flex-direction: column;
+  justify-content: center;
+  padding: clamp(2rem, 4vw, 5rem);
+  background: #1a2744;
+}
+.slide--editorial .text-half h2 {
+  font-family: 'Playfair Display', serif; font-weight: 700;
+  font-size: clamp(1.6rem, 3vw, 2.8rem); color: #c9a84c;
+  margin-bottom: 0.5em;
+}
+.slide--editorial .text-half p {
+  font-size: clamp(0.88rem, 1.3vw, 1.18rem); font-weight: 300;
+  color: #faf8f2; line-height: 1.68; margin-bottom: 0.5em;
+}
+.slide--editorial .text-half p strong {
+  font-weight: 600; color: #c9a84c;
+}
+.slide--editorial .text-half ul {
+  list-style: none; padding-left: 0; margin-bottom: 0.5em;
+}
+.slide--editorial .text-half ul li {
+  font-size: clamp(0.88rem, 1.3vw, 1.18rem); font-weight: 300;
+  color: #faf8f2; line-height: 1.68; padding-left: 1.2em;
+  position: relative; margin-bottom: 0.25em;
+}
+.slide--editorial .text-half ul li::before {
+  content: '\2022'; position: absolute; left: 0; color: #c9a84c; font-weight: 600;
+}
+.gold-rule {
+  width: 60px; height: 3px; background: #c9a84c;
+  margin-bottom: 1.2em; border: none;
+}
+.slide--editorial.img-right { flex-direction: row-reverse; }
+
+/* ===== FULL-IMAGE SLIDE ===== */
+.slide--fullimg {
+  justify-content: center; align-items: center; background: #111b30;
+  flex-direction: column;
+}
+.slide--fullimg .img-wrap {
+  flex: 1; display: flex; justify-content: center; align-items: center;
+  width: 100%; padding: clamp(0.5rem, 1vw, 1rem);
+}
+.slide--fullimg .img-wrap img {
+  max-height: 90vh; max-width: 96vw; object-fit: contain; cursor: pointer;
+}
+.slide--fullimg .caption {
+  font-size: clamp(0.85rem, 1.15vw, 1.05rem); font-weight: 300;
+  color: #faf8f2cc; padding-bottom: 2rem; text-align: center; max-width: 72ch;
+}
+
+/* ===== LARGE ARTEFACT SLIDE (equipment/armour — big image) ===== */
+.slide--artefact {
+  justify-content: center; align-items: center; background: #111b30;
+  flex-direction: column; padding: clamp(0.5rem, 1vw, 1.5rem);
+}
+.slide--artefact .img-wrap {
+  flex: 1; display: flex; justify-content: center; align-items: center;
+  width: 100%;
+}
+.slide--artefact .img-wrap img {
+  max-height: 85vh; max-width: 92vw; object-fit: contain; cursor: pointer;
+}
+.slide--artefact .caption {
+  font-family: 'Playfair Display', serif; font-weight: 700;
+  font-size: clamp(1rem, 1.8vw, 1.5rem); color: #c9a84c;
+  padding-bottom: 2rem; text-align: center;
+}
+
+/* ===== DUAL-IMAGE SLIDE ===== */
+.slide--dual {
+  flex-direction: column; justify-content: center; align-items: center;
+  background: #111b30; padding: clamp(0.5rem, 1.5vw, 2rem);
+}
+.slide--dual .caption {
+  font-family: 'Playfair Display', serif; font-weight: 700;
+  font-size: clamp(1rem, 1.8vw, 1.5rem); color: #c9a84c;
+  margin-bottom: 0.4em; text-align: center;
+}
+.slide--dual .gallery {
+  display: flex; gap: clamp(0.5rem, 1.2vw, 1.5rem);
+  flex: 1; width: 100%; justify-content: center; align-items: center;
+}
+.slide--dual .gallery img {
+  max-height: 78vh; object-fit: contain; cursor: pointer;
+  flex: 1; min-width: 0;
+}
+
+/* ===== TEXT-ONLY SLIDE ===== */
+.slide--text {
+  flex-direction: column; justify-content: center; align-items: center;
+  background: #1a2744; padding: clamp(2rem, 6vw, 8rem); text-align: left;
+}
+.slide--text .inner { max-width: 64ch; }
+.slide--text h2 {
+  font-family: 'Playfair Display', serif; font-weight: 700;
+  font-size: clamp(1.6rem, 3vw, 2.8rem); color: #c9a84c;
+  margin-bottom: 0.5em;
+}
+.slide--text p {
+  font-size: clamp(0.92rem, 1.35vw, 1.22rem); font-weight: 300;
+  color: #faf8f2; line-height: 1.72; margin-bottom: 0.55em;
+}
+.slide--text p strong { font-weight: 600; color: #c9a84c; }
+.slide--text a {
+  color: #c9a84c; text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.slide--text a:hover { color: #faf8f2; }
+
+/* ===== LIGHTBOX ===== */
+.lightbox {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 9999; display: none;
+  justify-content: center; align-items: center;
+  cursor: zoom-out;
+}
+.lightbox.active { display: flex; }
+.lightbox img { max-width: 92vw; max-height: 92vh; object-fit: contain; }
+
+/* ===== NAV BAR ===== */
+.nav-bar {
+  position: fixed; bottom: 0; left: 0; width: 100%; z-index: 900;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.55rem 1.2rem;
+  background: rgba(17,27,48,0.88); backdrop-filter: blur(8px);
+}
+.nav-bar .counter {
+  font-size: clamp(0.78rem, 1vw, 0.95rem); color: #faf8f2aa;
+  font-weight: 400; min-width: 6ch; text-align: center;
+}
+.progress-track {
+  flex: 1; height: 3px; background: rgba(250,248,242,0.15);
+  margin: 0 1rem; border-radius: 2px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: #c9a84c; width: 0%;
+  transition: width 0.35s ease;
+}
+.nav-btn {
+  background: none; border: 1px solid rgba(201,168,76,0.4);
+  color: #c9a84c; padding: 0.32rem 0.85rem; border-radius: 4px;
+  cursor: pointer; font-size: clamp(0.75rem, 1vw, 0.92rem);
+  font-family: 'Source Sans 3', sans-serif; transition: background 0.2s;
+}
+.nav-btn:hover { background: rgba(201,168,76,0.15); }
+
+/* ===== HELP OVERLAY ===== */
+.help-overlay {
+  position: fixed; inset: 0;
+  background: rgba(17,27,48,0.93);
+  z-index: 9998; display: none;
+  justify-content: center; align-items: center;
+}
+.help-overlay.active { display: flex; }
+.help-box {
+  background: #1a2744; border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 10px; padding: clamp(1.5rem, 3vw, 3rem);
+  max-width: 420px; width: 90vw;
+}
+.help-box h3 {
+  font-family: 'Playfair Display', serif; color: #c9a84c;
+  font-size: clamp(1.2rem, 2vw, 1.6rem); margin-bottom: 1em;
+}
+.help-box dl {
+  display: grid; grid-template-columns: auto 1fr; gap: 0.55em 1.2em;
+}
+.help-box dt {
+  font-weight: 600; color: #c9a84c;
+  font-size: clamp(0.85rem, 1vw, 1rem);
+}
+.help-box dd {
+  font-weight: 300; color: #faf8f2cc;
+  font-size: clamp(0.85rem, 1vw, 1rem);
+}
+
+/* ===== ANIMATIONS ===== */
+.anim {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.anim.visible { opacity: 1; transform: translateY(0); }
+.anim-d1 { transition-delay: 0.15s; }
+.anim-d2 { transition-delay: 0.30s; }
+.anim-d3 { transition-delay: 0.45s; }
+.back-link {
+  position: fixed;
+  top: 1rem;
+  left: 1.5rem;
+  z-index: 1000;
+  color: var(--gold, #c9a84c);
+  text-decoration: none;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.85rem;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.back-link:hover { opacity: 1; }
+</style>
+</head>
+<body>
+<a href="../persian-wars-first-invasion.html" class="back-link">&#8592; Back to site</a>
+
+<!-- ======== SLIDE 1 — Title ======== -->
+<section class="slide slide--title" id="slide-1">
+  <div class="bg"><img src="greek-vs-persian-armies-assets/image2.png" alt="Greek vs Persian armies"></div>
+  <div class="content">
+    <h1 class="anim">Greek vs Persian</h1>
+    <p class="subtitle anim anim-d1">Difference Between Greek and Persian Armies and Equipment</p>
+  </div>
+</section>
+
+<!-- ======== SLIDE 2 — Editorial (image left, odd) ======== -->
+<section class="slide slide--editorial" id="slide-2">
+  <div class="img-half"><img src="greek-vs-persian-armies-assets/image3.png" alt="Greek Hoplite" class="clickable-img"></div>
+  <div class="text-half">
+    <h2 class="anim">The Greek Hoplite</h2>
+    <hr class="gold-rule anim anim-d1">
+    <p class="anim anim-d1">The Hoplite, named after their large round shields or <em>hoplons</em>, was a group of elite heavy spearmen.</p>
+    <p class="anim anim-d2">They were all very similarly equipped, with a long spear and short sword, a dagger, bronze breastplates and greaves, a plumed helmet and of course, the signature bronze-plated hoplon.</p>
+    <p class="anim anim-d3">Because of the high quality of this equipment, surviving primary evidence ranging from paintings, pottery and carvings to existing archaeological pieces is actually a fairly common find for Greek historians.</p>
+  </div>
+</section>
+
+<!-- ======== SLIDE 3 — Artefact (large image) ======== -->
+<section class="slide slide--artefact" id="slide-3">
+  <p class="caption anim">Greek Armour in the British Museum</p>
+  <div class="img-wrap">
+    <img src="greek-vs-persian-armies-assets/image4.png" alt="Greek armour in the British Museum" class="clickable-img anim anim-d1">
+  </div>
+</section>
+
+<!-- ======== SLIDE 4 — Artefact (large image) ======== -->
+<section class="slide slide--artefact" id="slide-4">
+  <p class="caption anim">A Painting of Two Hoplites Fighting &mdash; Artwork Dates Back to 480 BCE</p>
+  <div class="img-wrap">
+    <img src="greek-vs-persian-armies-assets/image5.png" alt="Two hoplites fighting, 480 BCE" class="clickable-img anim anim-d1">
+  </div>
+</section>
+
+<!-- ======== SLIDE 5 — Artefact (large image) ======== -->
+<section class="slide slide--artefact" id="slide-5">
+  <p class="caption anim">Greek Hoplite</p>
+  <div class="img-wrap">
+    <img src="greek-vs-persian-armies-assets/image6.png" alt="Greek hoplite" class="clickable-img anim anim-d1">
+  </div>
+</section>
+
+<!-- ======== SLIDE 6 — Artefact (large image) ======== -->
+<section class="slide slide--artefact" id="slide-6">
+  <p class="caption anim">Greek Hoplite</p>
+  <div class="img-wrap">
+    <img src="greek-vs-persian-armies-assets/image7.png" alt="Greek hoplite equipment" class="clickable-img anim anim-d1">
+  </div>
+</section>
+
+<!-- ======== SLIDE 7 — Dual-image ======== -->
+<section class="slide slide--dual" id="slide-7">
+  <p class="caption anim">Greek Phalanx</p>
+  <div class="gallery">
+    <img src="greek-vs-persian-armies-assets/image8.png" alt="Greek phalanx formation 1" class="clickable-img anim anim-d1">
+    <img src="greek-vs-persian-armies-assets/image9.png" alt="Greek phalanx formation 2" class="clickable-img anim anim-d2">
+  </div>
+</section>
+
+<!-- ======== SLIDE 8 — Editorial (image right, even) ======== -->
+<section class="slide slide--editorial img-right" id="slide-8">
+  <div class="img-half"><img src="greek-vs-persian-armies-assets/image10.png" alt="Persian soldier" class="clickable-img"></div>
+  <div class="text-half">
+    <h2 class="anim">The Persian Soldier</h2>
+    <hr class="gold-rule anim anim-d1">
+    <p class="anim anim-d1">The Persian army comprised of the conquered levies and the Immortals. The levies were poorly equipped, badly trained and thrown into battles like livestock.</p>
+    <p class="anim anim-d2">Because of the cheap nature of their equipment, little to no archaeological evidence remains.</p>
+    <p class="anim anim-d2"><strong>An average soldier's equipment is presumed to be:</strong></p>
+    <ul class="anim anim-d3">
+      <li>A short spear</li>
+      <li>A small sword</li>
+      <li>A simple wooden bow</li>
+      <li>Cloth or leather tunics</li>
+      <li>A cloth headdress</li>
+      <li>A flimsy wicker or hide shield</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ======== SLIDE 9 — Artefact (large image) ======== -->
+<section class="slide slide--artefact" id="slide-9">
+  <div class="img-wrap">
+    <img src="greek-vs-persian-armies-assets/image11.png" alt="Persian soldier imagery" class="clickable-img anim">
+  </div>
+</section>
+
+<!-- ======== SLIDE 10 — Artefact (large image) ======== -->
+<section class="slide slide--artefact" id="slide-10">
+  <div class="img-wrap">
+    <img src="greek-vs-persian-armies-assets/image12.png" alt="Persian army equipment" class="clickable-img anim">
+  </div>
+</section>
+
+<!-- ======== SLIDE 11 — Artefact (large image) ======== -->
+<section class="slide slide--artefact" id="slide-11">
+  <div class="img-wrap">
+    <img src="greek-vs-persian-armies-assets/image13.png" alt="Persian military artefact" class="clickable-img anim">
+  </div>
+</section>
+
+<!-- ======== SLIDE 12 — Dual-image ======== -->
+<section class="slide slide--dual" id="slide-12">
+  <div class="gallery">
+    <img src="greek-vs-persian-armies-assets/image14.png" alt="Military comparison 1" class="clickable-img anim anim-d1">
+    <img src="greek-vs-persian-armies-assets/image15.png" alt="Military comparison 2" class="clickable-img anim anim-d2">
+  </div>
+</section>
+
+<!-- ======== SLIDE 13 — Artefact (large image) ======== -->
+<section class="slide slide--artefact" id="slide-13">
+  <div class="img-wrap">
+    <img src="greek-vs-persian-armies-assets/image16.png" alt="Military equipment" class="clickable-img anim">
+  </div>
+</section>
+
+<!-- ======== SLIDE 14 — Artefact (large image) ======== -->
+<section class="slide slide--artefact" id="slide-14">
+  <div class="img-wrap">
+    <img src="greek-vs-persian-armies-assets/image17.png" alt="Military comparison imagery" class="clickable-img anim">
+  </div>
+</section>
+
+<!-- ======== SLIDE 15 — Text-only (discussion prompt) ======== -->
+<section class="slide slide--text" id="slide-15">
+  <div class="inner">
+    <h2 class="anim">Discussion</h2>
+    <hr class="gold-rule anim anim-d1">
+    <p class="anim anim-d1"><strong>Discuss armament and fighting style.</strong></p>
+    <p class="anim anim-d2">Refer to:</p>
+    <p class="anim anim-d3"><a href="https://weaponsandwarfare.com/2015/08/06/armament-and-fighting-style-greek-vs-persian/" target="_blank" rel="noopener">Armament and Fighting Style: Greek vs Persian</a></p>
+  </div>
+</section>
+
+<!-- ======== LIGHTBOX ======== -->
+<div class="lightbox" id="lightbox"><img src="" alt="Enlarged view"></div>
+
+<!-- ======== NAV BAR ======== -->
+<nav class="nav-bar">
+  <button class="nav-btn" id="prevBtn" aria-label="Previous slide">&#8592; Prev</button>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <span class="counter" id="counter">1 / 15</span>
+  <button class="nav-btn" id="nextBtn" aria-label="Next slide">Next &#8594;</button>
+</nav>
+
+<!-- ======== HELP OVERLAY ======== -->
+<div class="help-overlay" id="helpOverlay">
+  <div class="help-box">
+    <h3>Keyboard Shortcuts</h3>
+    <dl>
+      <dt>&#8592; &#8594;</dt><dd>Navigate between slides</dd>
+      <dt>Space</dt><dd>Next slide</dd>
+      <dt>?</dt><dd>Show / hide this help</dd>
+      <dt>Click image</dt><dd>Zoom to full screen</dd>
+      <dt>Esc</dt><dd>Close zoom or help</dd>
+    </dl>
+  </div>
+</div>
+
+<script>
+(function(){
+  const TOTAL = 15;
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const progressFill = document.getElementById('progressFill');
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = lightbox.querySelector('img');
+  const helpOverlay = document.getElementById('helpOverlay');
+
+  let current = 0;
+
+  function goTo(i){
+    i = Math.max(0, Math.min(TOTAL - 1, i));
+    slides[i].scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function updateUI(idx){
+    current = idx;
+    counter.textContent = (idx + 1) + ' / ' + TOTAL;
+    progressFill.style.width = ((idx + 1) / TOTAL * 100) + '%';
+  }
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        const idx = Array.from(slides).indexOf(e.target);
+        updateUI(idx);
+        e.target.querySelectorAll('.anim').forEach(el => el.classList.add('visible'));
+      }
+    });
+  }, { threshold: 0.5 });
+  slides.forEach(s => obs.observe(s));
+
+  document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1));
+  document.getElementById('nextBtn').addEventListener('click', () => goTo(current + 1));
+
+  document.addEventListener('keydown', e => {
+    if(lightbox.classList.contains('active')){
+      if(e.key === 'Escape') lightbox.classList.remove('active');
+      return;
+    }
+    if(helpOverlay.classList.contains('active')){
+      if(e.key === 'Escape' || e.key === '?') helpOverlay.classList.remove('active');
+      return;
+    }
+    switch(e.key){
+      case 'ArrowRight': case 'ArrowDown': case ' ':
+        e.preventDefault(); goTo(current + 1); break;
+      case 'ArrowLeft': case 'ArrowUp':
+        e.preventDefault(); goTo(current - 1); break;
+      case '?':
+        helpOverlay.classList.toggle('active'); break;
+    }
+  });
+
+  document.querySelectorAll('.clickable-img').forEach(img => {
+    img.style.cursor = 'pointer';
+    img.addEventListener('click', () => {
+      lbImg.src = img.src;
+      lbImg.alt = img.alt;
+      lightbox.classList.add('active');
+    });
+  });
+  lightbox.addEventListener('click', () => lightbox.classList.remove('active'));
+
+  helpOverlay.addEventListener('click', e => {
+    if(e.target === helpOverlay) helpOverlay.classList.remove('active');
+  });
+
+  updateUI(0);
+  slides[0].querySelectorAll('.anim').forEach(el => el.classList.add('visible'));
+})();
+</script>
+</body>
+</html>

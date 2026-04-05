@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Delian League — Organisation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --navy: #1a2744;
+  --gold: #c9a84c;
+  --cream: #faf8f2;
+  --dark-navy: #111b30;
+  --gold-dim: rgba(201,168,76,0.25);
+}
+
+html { scroll-behavior: smooth; overflow: hidden; }
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--dark-navy);
+  color: var(--cream);
+  overflow: hidden;
+  height: 100vh;
+}
+
+.deck { position: relative; height: 100vh; overflow: hidden; }
+
+.slide {
+  position: absolute; inset: 0; width: 100%; height: 100vh;
+  display: none; overflow: hidden;
+}
+.slide.active { display: flex; }
+
+h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 4px;
+  background: var(--gold); z-index: 1000;
+  transition: width 0.4s ease;
+}
+
+.slide-counter {
+  position: fixed; bottom: clamp(12px, 2vh, 24px); right: clamp(16px, 2vw, 32px);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: clamp(11px, 1.2vw, 15px);
+  color: var(--gold); z-index: 1000;
+  letter-spacing: 0.12em; font-weight: 600; opacity: 0.85;
+}
+
+.anim { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.anim.visible { opacity: 1; transform: translateY(0); }
+.anim-delay-1 { transition-delay: 0.15s; }
+.anim-delay-2 { transition-delay: 0.3s; }
+.anim-delay-3 { transition-delay: 0.45s; }
+.anim-delay-4 { transition-delay: 0.6s; }
+
+/* ── Title Slide ── */
+.slide-title {
+  flex-direction: column; justify-content: center; align-items: center;
+  text-align: center; background-size: cover; background-position: center;
+  position: relative;
+}
+.slide-title::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(17,27,48,0.55) 0%, rgba(17,27,48,0.82) 60%, rgba(17,27,48,0.95) 100%);
+  z-index: 1;
+}
+.slide-title .title-content { position: relative; z-index: 2; max-width: 80%; }
+.slide-title h1 {
+  font-size: clamp(2.4rem, 5.5vw, 5rem); font-weight: 900;
+  color: var(--cream); line-height: 1.1;
+  margin-bottom: clamp(8px, 1.5vh, 20px); letter-spacing: -0.01em;
+}
+.slide-title .subtitle {
+  font-size: clamp(1rem, 2vw, 1.6rem); color: var(--gold);
+  font-weight: 300; letter-spacing: 0.15em; text-transform: uppercase;
+}
+.slide-title .credit {
+  font-size: clamp(0.55rem, 0.8vw, 0.75rem);
+  color: rgba(250,248,242,0.35); margin-top: clamp(20px, 4vh, 50px); font-weight: 300;
+}
+
+/* ── 50/50 Split ── */
+.slide-split { flex-direction: row; }
+.slide-split.img-right { flex-direction: row-reverse; }
+.slide-split .split-image { width: 50%; height: 100vh; overflow: hidden; flex-shrink: 0; }
+.slide-split .split-image img {
+  width: 100%; height: 100%; object-fit: cover; display: block; cursor: zoom-in;
+}
+.slide-split .split-text {
+  width: 50%; display: flex; flex-direction: column; justify-content: center;
+  padding: clamp(24px, 4vw, 72px) clamp(28px, 4.5vw, 80px); background: var(--navy);
+}
+.slide-split .split-text h2 {
+  font-size: clamp(1.4rem, 2.8vw, 2.6rem); font-weight: 900;
+  color: var(--gold); margin-bottom: clamp(10px, 1.8vh, 24px); line-height: 1.15;
+}
+.slide-split .split-text p {
+  font-size: clamp(0.8rem, 1.35vw, 1.15rem); line-height: 1.65;
+  color: var(--cream); margin-bottom: clamp(6px, 1vh, 14px); font-weight: 300;
+}
+.slide-split .split-text p strong { font-weight: 600; color: var(--gold); }
+
+/* ── Text-Heavy ── */
+.slide-text {
+  flex-direction: column; justify-content: center; align-items: center;
+  background: var(--navy);
+  padding: clamp(28px, 5vw, 80px) clamp(40px, 8vw, 160px);
+}
+.slide-text h2 {
+  font-size: clamp(1.6rem, 3vw, 2.8rem); font-weight: 900;
+  color: var(--gold); margin-bottom: clamp(14px, 2.5vh, 32px);
+  text-align: center; line-height: 1.2;
+}
+.slide-text .text-body { max-width: 900px; width: 100%; }
+.slide-text p {
+  font-size: clamp(0.82rem, 1.3vw, 1.12rem); line-height: 1.7;
+  color: var(--cream); margin-bottom: clamp(8px, 1.2vh, 16px); font-weight: 300;
+}
+.slide-text p strong { font-weight: 600; color: var(--gold); }
+.slide-text ul { list-style: none; padding: 0; margin-top: clamp(4px, 0.5vh, 8px); }
+.slide-text ul li {
+  font-size: clamp(0.82rem, 1.3vw, 1.12rem); line-height: 1.7;
+  color: var(--cream); margin-bottom: clamp(6px, 1vh, 12px);
+  padding-left: clamp(16px, 1.5vw, 24px); position: relative; font-weight: 300;
+}
+.slide-text ul li::before {
+  content: ''; position: absolute; left: 0; top: clamp(8px, 0.7vw, 11px);
+  width: clamp(5px, 0.5vw, 8px); height: clamp(5px, 0.5vw, 8px);
+  background: var(--gold); border-radius: 50%;
+}
+.slide-text .note-box {
+  margin-top: clamp(10px, 1.5vh, 20px);
+  padding: clamp(10px, 1.5vh, 18px) clamp(14px, 1.5vw, 24px);
+  border-left: 3px solid var(--gold);
+  background: rgba(201,168,76,0.08);
+}
+.slide-text .note-box p {
+  font-size: clamp(0.72rem, 1.1vw, 0.95rem);
+  color: rgba(250,248,242,0.7); margin-bottom: 0;
+}
+
+/* ── Quote Slide ── */
+.slide-quote {
+  flex-direction: column; justify-content: center; align-items: center;
+  background: var(--dark-navy);
+  padding: clamp(28px, 5vw, 80px) clamp(40px, 8vw, 160px);
+  text-align: center;
+}
+.slide-quote .quote-block { max-width: 850px; position: relative; }
+.slide-quote .quote-mark {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3rem, 7vw, 7rem); color: var(--gold); line-height: 1; opacity: 0.6;
+  position: absolute; top: clamp(-30px, -4vh, -50px); left: clamp(-20px, -2vw, -40px);
+}
+.slide-quote blockquote {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(0.95rem, 1.6vw, 1.5rem); font-weight: 700; font-style: italic;
+  color: var(--cream); line-height: 1.55; margin-bottom: clamp(14px, 2.5vh, 30px);
+}
+.slide-quote .attribution {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: clamp(0.7rem, 1vw, 0.95rem); color: var(--gold);
+  font-weight: 400; letter-spacing: 0.08em;
+}
+.slide-quote.long-quote blockquote {
+  font-size: clamp(0.82rem, 1.25vw, 1.2rem); line-height: 1.6;
+}
+.slide-quote.long-quote .quote-block { max-width: 920px; }
+
+/* ── Lightbox ── */
+.lightbox {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.92);
+  z-index: 9999; display: none; justify-content: center; align-items: center;
+  cursor: zoom-out;
+}
+.lightbox.active { display: flex; }
+.lightbox img { max-width: 92vw; max-height: 92vh; object-fit: contain; }
+
+/* ── Help Overlay ── */
+.help-overlay {
+  position: fixed; inset: 0; background: rgba(17,27,48,0.95);
+  z-index: 9998; display: none; justify-content: center; align-items: center;
+  flex-direction: column;
+}
+.help-overlay.active { display: flex; }
+.help-overlay h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.4rem, 2.5vw, 2rem); color: var(--gold);
+  margin-bottom: clamp(16px, 3vh, 32px);
+}
+.help-overlay .keys { display: flex; flex-direction: column; gap: clamp(8px, 1.2vh, 14px); }
+.help-overlay .key-row {
+  display: flex; align-items: center; gap: clamp(10px, 1.5vw, 20px);
+  font-size: clamp(0.85rem, 1.2vw, 1.1rem); color: var(--cream);
+}
+.help-overlay kbd {
+  background: var(--navy); border: 1px solid var(--gold); border-radius: 4px;
+  padding: clamp(3px, 0.4vh, 6px) clamp(8px, 0.8vw, 14px);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: clamp(0.75rem, 1vw, 0.95rem); color: var(--gold);
+  min-width: 40px; text-align: center;
+}
+.back-link {
+  position: fixed;
+  top: 1rem;
+  left: 1.5rem;
+  z-index: 1000;
+  color: var(--gold, #c9a84c);
+  text-decoration: none;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.85rem;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.back-link:hover { opacity: 1; }
+</style>
+</head>
+<body>
+<a href="../athenian-empire-delian-league.html" class="back-link">&#8592; Back to site</a>
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-counter" id="slideCounter"></div>
+
+<div class="deck" id="deck">
+
+<!-- SLIDE 1 — Title -->
+<div class="slide slide-title active" style="background-image: url('delian-league-organisation-assets/image1.jpg');">
+  <div class="title-content">
+    <h1 class="anim">The Delian League</h1>
+    <div class="subtitle anim anim-delay-1">Organisation of the League</div>
+    <div class="credit anim anim-delay-2">Photo by Unknown Author — licensed under CC BY-SA</div>
+  </div>
+</div>
+
+<!-- SLIDE 2 — Split: image left -->
+<div class="slide slide-split">
+  <div class="split-image">
+    <img src="delian-league-organisation-assets/image2.jpg" alt="Aristides and Cimon">
+  </div>
+  <div class="split-text">
+    <h2 class="anim">Organising the League</h2>
+    <p class="anim anim-delay-1">The two Athenians who were most influential in organising and leading the Delian League were <strong>Aristides</strong> and <strong>Cimon</strong>.</p>
+    <p class="anim anim-delay-2"><strong>Aristides' first task was to organise a meeting of delegates from Athens and the Aegean and Ionian allies. This was to be held on the island of Delos which was chosen as the headquarters of the league.</strong></p>
+  </div>
+</div>
+
+<!-- SLIDE 3 — Text-Heavy: Why Delos? -->
+<div class="slide slide-text">
+  <h2 class="anim">Why Delos?</h2>
+  <div class="text-body">
+    <p class="anim anim-delay-1">There are several reasons why Delos was chosen as the headquarters of the League:</p>
+    <ul>
+      <li class="anim anim-delay-1">Delos was the ancient centre of Ionian culture and religion based on the cult of Apollo. Remember, the Athenians were of the same racial group as the Ionians of Asia Minor.</li>
+      <li class="anim anim-delay-2">It possessed a good harbour which was important for a naval league.</li>
+      <li class="anim anim-delay-3">The tiny island of Delos was politically insignificant.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- SLIDE 4 — Text-Heavy: Financing -->
+<div class="slide slide-text">
+  <h2 class="anim">Financing the League</h2>
+  <div class="text-body">
+    <p class="anim anim-delay-1">To carry out its objectives the Delian League had to be financed. The allies appointed Aristides <strong>'to survey the various territories and their revenues to fix the contributions according to each member's ability to pay.'</strong></p>
+    <p class="anim anim-delay-2">It is believed that Aristides assessed the total amount as <strong>460 talents</strong> and then decided which states should contribute ships to the league navy and which states should provide money.</p>
+    <div class="note-box anim anim-delay-3">
+      <p><strong>Note:</strong> A talent was a weight and a unit of currency. One talent of silver equalled 6,000 drachmas and 36,000 obols. A skilled worker earned approximately one drachma a day, while an unskilled worker earned one obol a day.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 5 — Split: image right -->
+<div class="slide slide-split img-right">
+  <div class="split-image">
+    <img src="delian-league-organisation-assets/image3.jpg" alt="Contributions to the League">
+  </div>
+  <div class="split-text">
+    <h2 class="anim">Contributions</h2>
+    <p class="anim anim-delay-1">Those states which contributed ships, such as Athens and the large islands of Chios, Samos, Lesbos, Naxos and Thasos, retained control of their ships and were expected to serve in the League fleet for only part of the year.</p>
+    <p class="anim anim-delay-2"><strong>Aristides worked out a money equivalent for the ship contributions. The money contributions, called phoroi (phoros — singular) were collected by ten Athenian officials called hellenotamiae (stewards of the Greeks). The money contributions were kept in the treasury at Delos.</strong></p>
+    <p class="anim anim-delay-3">Plutarch praised Aristides for his 'scrupulous integrity and justice' in drawing up the lists of assessments and recorded that the league members 'felt they had been appropriately and satisfactorily dealt with.'</p>
+  </div>
+</div>
+
+<!-- SLIDE 6 — Text-Heavy: Meetings -->
+<div class="slide slide-text">
+  <h2 class="anim">Meetings</h2>
+  <div class="text-body">
+    <p class="anim anim-delay-1"><strong>Although the leadership of the League was Athenian, it was agreed that each member state was to be autonomous (independent). There was no compulsion for members to have a particular form of government. Some states were democratic while others were oligarchic.</strong></p>
+    <p class="anim anim-delay-2"><strong>According to Thucydides, a council or synod of allied representatives met in the temple at Delos. It is not known how often these meetings were held or at what time of the year. They were probably convened when the allies' representatives brought their contributions to Delos, possibly at the time of the festival of the Delian Apollo.</strong></p>
+  </div>
+</div>
+
+<!-- SLIDE 7 — Text-Heavy: Council Policy -->
+<div class="slide slide-text">
+  <h2 class="anim">Council Policy and Athenian Influence</h2>
+  <div class="text-body">
+    <p class="anim anim-delay-1">This was celebrated at the beginning of the sailing season and would have been an ideal time to discuss the campaigns to be conducted during the summer and to receive a report from the hellenotamiae.</p>
+    <p class="anim anim-delay-2">The council decided league policy and strategy and Athenian officials carried them out. It is possible that Athens, as leader and most influential state, could <strong>control the vote by her patronage (support) or intimidation (threat) of smaller states</strong>. They would tend to follow Athens' lead.</p>
+  </div>
+</div>
+
+<!-- SLIDE 8 — Quote: Aristotle on Oaths -->
+<div class="slide slide-quote">
+  <div class="quote-block anim">
+    <div class="quote-mark">&ldquo;</div>
+    <blockquote>...it was [Aristides] ...who swore the oaths to the Ionians that they should have the same friends and enemies, to confirm which they sank lumps of iron into the sea.</blockquote>
+    <div class="attribution">Aristotle, <em>Athenian Constitution</em> 23</div>
+  </div>
+  <div style="max-width:850px; margin-top: clamp(20px, 3vh, 36px);">
+    <p class="anim anim-delay-1" style="font-size: clamp(0.78rem,1.15vw,1rem); color: var(--cream); line-height:1.65; font-weight:300; text-align:center;">
+      <span style="color: var(--gold); font-weight:600;">Oaths of Allegiance</span><br>
+      Oaths of allegiance were taken by Athens and the allies when the Delian League was formed. Thucydides does not mention the oaths directly but Plutarch and Aristotle do.
+    </p>
+  </div>
+</div>
+
+<!-- SLIDE 9 — Quote + Text: Permanent Oaths -->
+<div class="slide slide-quote long-quote">
+  <div class="quote-block anim">
+    <div class="quote-mark">&ldquo;</div>
+    <blockquote>It was Aristides who made all the Greeks swear to maintain the alliance against the Persians, and he himself took the oath for Athens and to solemnise it threw wedges of hot iron into the sea.</blockquote>
+    <div class="attribution">Plutarch, <em>Aristides</em> 25 in <em>The Rise and Fall of Athens</em></div>
+  </div>
+  <div style="max-width:850px; margin-top: clamp(18px, 2.5vh, 32px);">
+    <p class="anim anim-delay-1" style="font-size: clamp(0.75rem,1.1vw,0.95rem); color: var(--cream); line-height:1.65; font-weight:300; text-align:left;">According to Aristotle and Plutarch, the allies agreed to continue the war against Persia and to 'have the same friends and enemies.' This latter point meant that they agreed to have the same foreign policy.</p>
+    <p class="anim anim-delay-2" style="font-size: clamp(0.75rem,1.1vw,0.95rem); color: var(--cream); line-height:1.65; font-weight:300; text-align:left; margin-top: clamp(6px,1vh,12px);">The act of throwing iron into the sea has been interpreted by the majority of historians to mean that <span style="color: var(--gold); font-weight:600;">the oaths were to be permanent</span> — the members were not to leave the league until the iron floated or until Persia was no longer a threat.</p>
+    <p class="anim anim-delay-3" style="font-size: clamp(0.75rem,1.1vw,0.95rem); color: var(--cream); line-height:1.65; font-weight:300; text-align:left; margin-top: clamp(6px,1vh,12px);">However, others — like H. Jacobsen — have interpreted it to mean that anyone breaking the oath would be thrown out of the League. If we support the former view, the symbolism implies that secession from the league would be seen as rebellion and that the league members would be justified in forcing rebellious members back into allegiance.</p>
+  </div>
+</div>
+
+</div><!-- end deck -->
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <img src="" alt="Enlarged image" id="lightboxImg">
+</div>
+
+<!-- Help Overlay -->
+<div class="help-overlay" id="helpOverlay">
+  <h3>Keyboard Shortcuts</h3>
+  <div class="keys">
+    <div class="key-row"><kbd>&rarr;</kbd> <span>Next slide</span></div>
+    <div class="key-row"><kbd>&larr;</kbd> <span>Previous slide</span></div>
+    <div class="key-row"><kbd>Space</kbd> <span>Next slide</span></div>
+    <div class="key-row"><kbd>Home</kbd> <span>First slide</span></div>
+    <div class="key-row"><kbd>End</kbd> <span>Last slide</span></div>
+    <div class="key-row"><kbd>Esc</kbd> <span>Close lightbox / help</span></div>
+    <div class="key-row"><kbd>?</kbd> <span>Toggle this help</span></div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  const progressBar = document.getElementById('progressBar');
+  const counter = document.getElementById('slideCounter');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const helpOverlay = document.getElementById('helpOverlay');
+
+  function goTo(n) {
+    if (n < 0 || n >= total) return;
+    slides[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    updateUI();
+    triggerAnimations();
+  }
+
+  function updateUI() {
+    progressBar.style.width = ((current + 1) / total * 100) + '%';
+    counter.textContent = (current + 1) + ' / ' + total;
+  }
+
+  function triggerAnimations() {
+    const els = slides[current].querySelectorAll('.anim');
+    els.forEach(el => el.classList.remove('visible'));
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        els.forEach(el => el.classList.add('visible'));
+      });
+    });
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (lightbox.classList.contains('active')) {
+      if (e.key === 'Escape' || e.key === ' ') { lightbox.classList.remove('active'); e.preventDefault(); return; }
+    }
+    if (helpOverlay.classList.contains('active')) {
+      if (e.key === 'Escape' || e.key === '?') { helpOverlay.classList.remove('active'); e.preventDefault(); return; }
+    }
+    switch(e.key) {
+      case 'ArrowRight': case ' ': goTo(current + 1); e.preventDefault(); break;
+      case 'ArrowLeft': goTo(current - 1); e.preventDefault(); break;
+      case 'Home': goTo(0); e.preventDefault(); break;
+      case 'End': goTo(total - 1); e.preventDefault(); break;
+      case '?': helpOverlay.classList.toggle('active'); e.preventDefault(); break;
+      case 'Escape': break;
+    }
+  });
+
+  document.querySelectorAll('.split-image img, .slide-full-image .image-wrapper img').forEach(img => {
+    img.addEventListener('click', function() {
+      lightboxImg.src = this.src;
+      lightbox.classList.add('active');
+    });
+  });
+  lightbox.addEventListener('click', function() { lightbox.classList.remove('active'); });
+
+  updateUI();
+  triggerAnimations();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Delian League — Activities</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --navy: #1a2744;
+  --gold: #c9a84c;
+  --cream: #faf8f2;
+  --dark-navy: #111b30;
+  --gold-dim: rgba(201,168,76,0.25);
+}
+
+html { scroll-behavior: smooth; overflow: hidden; }
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--dark-navy);
+  color: var(--cream);
+  overflow: hidden;
+  height: 100vh;
+}
+
+.deck { position: relative; height: 100vh; overflow: hidden; }
+
+.slide {
+  position: absolute; inset: 0; width: 100%; height: 100vh;
+  display: none; overflow: hidden;
+}
+.slide.active { display: flex; }
+
+h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 4px;
+  background: var(--gold); z-index: 1000;
+  transition: width 0.4s ease;
+}
+
+.slide-counter {
+  position: fixed; bottom: clamp(12px, 2vh, 24px); right: clamp(16px, 2vw, 32px);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: clamp(11px, 1.2vw, 15px);
+  color: var(--gold); z-index: 1000;
+  letter-spacing: 0.12em; font-weight: 600; opacity: 0.85;
+}
+
+.anim { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.anim.visible { opacity: 1; transform: translateY(0); }
+.anim-delay-1 { transition-delay: 0.15s; }
+.anim-delay-2 { transition-delay: 0.3s; }
+.anim-delay-3 { transition-delay: 0.45s; }
+.anim-delay-4 { transition-delay: 0.6s; }
+.anim-delay-5 { transition-delay: 0.75s; }
+
+/* ── Title Slide ── */
+.slide-title {
+  flex-direction: column; justify-content: center; align-items: center;
+  text-align: center; background-size: cover; background-position: center;
+  position: relative;
+}
+.slide-title::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(17,27,48,0.55) 0%, rgba(17,27,48,0.82) 60%, rgba(17,27,48,0.95) 100%);
+  z-index: 1;
+}
+.slide-title .title-content { position: relative; z-index: 2; max-width: 80%; }
+.slide-title h1 {
+  font-size: clamp(2.2rem, 5vw, 4.5rem); font-weight: 900;
+  color: var(--cream); line-height: 1.1;
+  margin-bottom: clamp(8px, 1.5vh, 20px); letter-spacing: -0.01em;
+}
+.slide-title .subtitle {
+  font-size: clamp(1rem, 2vw, 1.6rem); color: var(--gold);
+  font-weight: 300; letter-spacing: 0.15em; text-transform: uppercase;
+}
+
+/* ── 50/50 Split ── */
+.slide-split { flex-direction: row; }
+.slide-split.img-right { flex-direction: row-reverse; }
+.slide-split .split-image { width: 50%; height: 100vh; overflow: hidden; flex-shrink: 0; }
+.slide-split .split-image img {
+  width: 100%; height: 100%; object-fit: cover; display: block; cursor: zoom-in;
+}
+.slide-split .split-text {
+  width: 50%; display: flex; flex-direction: column; justify-content: center;
+  padding: clamp(24px, 4vw, 72px) clamp(28px, 4.5vw, 80px); background: var(--navy);
+}
+.slide-split .split-text h2 {
+  font-size: clamp(1.4rem, 2.8vw, 2.6rem); font-weight: 900;
+  color: var(--gold); margin-bottom: clamp(10px, 1.8vh, 24px); line-height: 1.15;
+}
+.slide-split .split-text p {
+  font-size: clamp(0.8rem, 1.35vw, 1.15rem); line-height: 1.65;
+  color: var(--cream); margin-bottom: clamp(6px, 1vh, 14px); font-weight: 300;
+}
+.slide-split .split-text p strong { font-weight: 600; color: var(--gold); }
+
+/* ── Text-Heavy ── */
+.slide-text {
+  flex-direction: column; justify-content: center; align-items: center;
+  background: var(--navy);
+  padding: clamp(20px, 4vw, 64px) clamp(40px, 8vw, 160px);
+}
+.slide-text h2 {
+  font-size: clamp(1.5rem, 2.8vw, 2.6rem); font-weight: 900;
+  color: var(--gold); margin-bottom: clamp(12px, 2vh, 28px);
+  text-align: center; line-height: 1.2;
+}
+.slide-text .text-body { max-width: 920px; width: 100%; }
+.slide-text p {
+  font-size: clamp(0.78rem, 1.2vw, 1.05rem); line-height: 1.7;
+  color: var(--cream); margin-bottom: clamp(6px, 1vh, 14px); font-weight: 300;
+}
+.slide-text p strong { font-weight: 600; color: var(--gold); }
+.slide-text ul { list-style: none; padding: 0; margin-top: clamp(4px, 0.5vh, 8px); }
+.slide-text ul li {
+  font-size: clamp(0.78rem, 1.2vw, 1.05rem); line-height: 1.7;
+  color: var(--cream); margin-bottom: clamp(5px, 0.8vh, 10px);
+  padding-left: clamp(16px, 1.5vw, 24px); position: relative; font-weight: 300;
+}
+.slide-text ul li::before {
+  content: ''; position: absolute; left: 0; top: clamp(8px, 0.7vw, 11px);
+  width: clamp(5px, 0.5vw, 8px); height: clamp(5px, 0.5vw, 8px);
+  background: var(--gold); border-radius: 50%;
+}
+
+/* ── Section Heading within text ── */
+.slide-text .section-label {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1rem, 1.8vw, 1.5rem);
+  font-weight: 700;
+  color: var(--gold);
+  margin-top: clamp(14px, 2vh, 24px);
+  margin-bottom: clamp(6px, 1vh, 12px);
+}
+
+/* ── Quote Slide ── */
+.slide-quote {
+  flex-direction: column; justify-content: center; align-items: center;
+  background: var(--dark-navy);
+  padding: clamp(28px, 5vw, 80px) clamp(40px, 8vw, 160px);
+  text-align: center;
+}
+.slide-quote .quote-block { max-width: 850px; position: relative; }
+.slide-quote .quote-mark {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3rem, 7vw, 7rem); color: var(--gold); line-height: 1; opacity: 0.6;
+  position: absolute; top: clamp(-30px, -4vh, -50px); left: clamp(-20px, -2vw, -40px);
+}
+.slide-quote blockquote {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(0.95rem, 1.6vw, 1.5rem); font-weight: 700; font-style: italic;
+  color: var(--cream); line-height: 1.55; margin-bottom: clamp(14px, 2.5vh, 30px);
+}
+.slide-quote .attribution {
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: clamp(0.7rem, 1vw, 0.95rem); color: var(--gold);
+  font-weight: 400; letter-spacing: 0.08em;
+}
+
+/* ── Full-Image ── */
+.slide-full-image {
+  flex-direction: column; justify-content: center; align-items: center;
+  background: var(--dark-navy); padding: clamp(16px, 2vh, 30px);
+}
+.slide-full-image .image-wrapper {
+  flex: 1; display: flex; justify-content: center; align-items: center;
+  width: 100%; overflow: hidden;
+}
+.slide-full-image .image-wrapper img {
+  max-width: 92%; max-height: 82vh; object-fit: contain; cursor: zoom-in;
+}
+.slide-full-image .caption {
+  font-size: clamp(0.7rem, 1vw, 0.9rem);
+  color: rgba(250,248,242,0.5); text-align: center;
+  margin-top: clamp(6px, 1vh, 14px); font-weight: 300;
+}
+
+/* ── Lightbox ── */
+.lightbox {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.92);
+  z-index: 9999; display: none; justify-content: center; align-items: center;
+  cursor: zoom-out;
+}
+.lightbox.active { display: flex; }
+.lightbox img { max-width: 92vw; max-height: 92vh; object-fit: contain; }
+
+/* ── Help Overlay ── */
+.help-overlay {
+  position: fixed; inset: 0; background: rgba(17,27,48,0.95);
+  z-index: 9998; display: none; justify-content: center; align-items: center;
+  flex-direction: column;
+}
+.help-overlay.active { display: flex; }
+.help-overlay h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.4rem, 2.5vw, 2rem); color: var(--gold);
+  margin-bottom: clamp(16px, 3vh, 32px);
+}
+.help-overlay .keys { display: flex; flex-direction: column; gap: clamp(8px, 1.2vh, 14px); }
+.help-overlay .key-row {
+  display: flex; align-items: center; gap: clamp(10px, 1.5vw, 20px);
+  font-size: clamp(0.85rem, 1.2vw, 1.1rem); color: var(--cream);
+}
+.help-overlay kbd {
+  background: var(--navy); border: 1px solid var(--gold); border-radius: 4px;
+  padding: clamp(3px, 0.4vh, 6px) clamp(8px, 0.8vw, 14px);
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: clamp(0.75rem, 1vw, 0.95rem); color: var(--gold);
+  min-width: 40px; text-align: center;
+}
+.back-link {
+  position: fixed;
+  top: 1rem;
+  left: 1.5rem;
+  z-index: 1000;
+  color: var(--gold, #c9a84c);
+  text-decoration: none;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.85rem;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.back-link:hover { opacity: 1; }
+</style>
+</head>
+<body>
+<a href="../athenian-empire-delian-league.html" class="back-link">&#8592; Back to site</a>
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-counter" id="slideCounter"></div>
+
+<div class="deck" id="deck">
+
+<!-- SLIDE 1 — Title -->
+<div class="slide slide-title active" style="background-image: url('delian-league-activities-assets/image1.jpg');">
+  <div class="title-content">
+    <h1 class="anim">Activities of the Delian League</h1>
+    <div class="subtitle anim anim-delay-1">The Greek World 500 – 440 BC</div>
+  </div>
+</div>
+
+<!-- SLIDE 2 — Split: image left (Thucydides) -->
+<div class="slide slide-split">
+  <div class="split-image">
+    <img src="delian-league-activities-assets/image3.jpg" alt="Thucydides">
+  </div>
+  <div class="split-text">
+    <h2 class="anim">Thucydides as a Source</h2>
+    <p class="anim anim-delay-1">There are three things you should remember about Thucydides' brief account of the early actions of the Delian League:</p>
+    <p class="anim anim-delay-2">He mentions only those incidents which had a direct bearing on his theme, that is, the <strong>growth of Athenian imperialism</strong>. There may well have been other actions taken by the League members but we have no evidence of these.</p>
+    <p class="anim anim-delay-3">According to Thucydides it appears that the Athenians did all the work. Although Athens was the leader, the actions were all carried out as an <strong>allied effort</strong>.</p>
+    <p class="anim anim-delay-4">Although the aims of the Delian League from the beginning were to free those Greeks and city-states from the control of Persia, the League forces were also starting to be used <strong>against other Greek city-states</strong>.</p>
+  </div>
+</div>
+
+<!-- SLIDE 3 — Text Divider -->
+<div class="slide slide-text" style="background: var(--dark-navy);">
+  <h2 class="anim" style="font-size: clamp(1.8rem, 3.5vw, 3.2rem);">Early Actions of the League</h2>
+  <div class="text-body" style="text-align:center;">
+    <p class="anim anim-delay-1" style="font-size: clamp(0.9rem, 1.4vw, 1.2rem); color: var(--gold); font-weight:400;">478 – 474 BC</p>
+  </div>
+</div>
+
+<!-- SLIDE 4 — Text-Heavy: Byzantium, Eion, Scyros -->
+<div class="slide slide-text">
+  <h2 class="anim">Early Military Campaigns</h2>
+  <div class="text-body">
+    <div class="section-label anim">The Capture of Byzantium 478–477 BC</div>
+    <p class="anim anim-delay-1"><strong>Pausanias was driven out of Byzantium</strong> and the city captured. This cut the Persians off from their garrisons in Thrace and gave the Greeks access once again to the valuable trade of the Black Sea.</p>
+
+    <div class="section-label anim anim-delay-1">The Siege and Capture of Eion 476–475 BC</div>
+    <p class="anim anim-delay-2"><strong>The town of Eion</strong>, at the mouth of the Strymon River, occupied a very strategic position on the major east-west land route. It was also of great economic importance. The gold mines of Mt Pangaeus were nearby and the town was a centre of exchange for precious ores, timber, and corn.</p>
+    <p class="anim anim-delay-3">The Persian commander, Boges, defended it heroically but when defeat was obvious, he built a pyre and he and his family committed suicide after throwing all their possessions into the river.</p>
+
+    <div class="section-label anim anim-delay-3">The Conquest of Scyros 474 BC</div>
+    <p class="anim anim-delay-4"><strong>The rocky island of Scyros was the stronghold of a group of non-Greek pirates.</strong> This had nothing to do with Persia. Plutarch suggests an oracle instructed Cimon to capture the island and recover the bones of Theseus. An important result was the establishment of an <strong>Athenian kleruchy</strong> on the island.</p>
+  </div>
+</div>
+
+<!-- SLIDE 5 — Full-Image: Activities Map -->
+<div class="slide slide-full-image">
+  <div class="image-wrapper">
+    <img src="delian-league-activities-assets/image4.png" alt="Map of Delian League activities" class="anim">
+  </div>
+  <div class="caption anim anim-delay-1">Activities of the Delian League across the Aegean</div>
+</div>
+
+<!-- SLIDE 6 — Text-Heavy: Kleruchies -->
+<div class="slide slide-text">
+  <h2 class="anim">Athenian Expansion</h2>
+  <div class="text-body">
+    <p class="anim anim-delay-1"><strong>Athens later established kleroi all over the Aegean area.</strong> This was another indication of Athens' plans to extend its sphere of influence.</p>
+  </div>
+</div>
+
+<!-- SLIDE 7 — Text-Heavy: Coercion of Carystus -->
+<div class="slide slide-text">
+  <h2 class="anim">The Coercion of Carystus — 472 BC</h2>
+  <div class="text-body">
+    <p class="anim anim-delay-1"><strong>Carystus</strong>, on the southern tip of Euboea, had been unwilling to join the Delian League so the League used <strong>force or coercion</strong> to enrol it in the League. Why did they do this?</p>
+    <p class="anim anim-delay-2">Carystus had collaborated with the Persians in 480 BC by sending ships to the Persian fleet after the Battle of Artemisium. Members of the League, particularly Athens, thought they might do so again.</p>
+    <p class="anim anim-delay-3">The position of Carystus, close to Athens and dominating the sea route between Euboea and Andros, made this possibility very dangerous. It is possible that the members also thought that Carystus was enjoying all the advantages of League membership (protection) without any of the responsibilities.</p>
+    <p class="anim anim-delay-4">However, to make war on a state which desired to remain neutral, and to deprive it of its independence was <strong>an outrage to most Greeks</strong>. The only justification the League could make was that of political necessity, as the Persians were still a major threat in the region.</p>
+  </div>
+</div>
+
+<!-- SLIDE 8 — Quote + Text: Revolt of Naxos -->
+<div class="slide slide-quote">
+  <div class="quote-block anim">
+    <div class="quote-mark">&ldquo;</div>
+    <blockquote>...Naxos left the League and the Athenians made war on the place. After a siege Naxos was forced back to allegiance. This was the first case when the original constitution of the League was broken and an allied city lost its independence...</blockquote>
+    <div class="attribution">Thucydides, <em>The Peloponnesian War</em> 1.99</div>
+  </div>
+  <div style="max-width:850px; margin-top: clamp(18px, 2.5vh, 30px);">
+    <p class="anim anim-delay-1" style="font-size: clamp(0.75rem,1.1vw,0.95rem); color: var(--cream); line-height:1.65; font-weight:300; text-align:left;">
+      <span style="color: var(--gold); font-weight:600;">The Revolt and Subjugation of Naxos</span> — Naxos was one of the largest islands in the Aegean and an important ship-contributing member. Although it is not certain what punishment was meted out, it probably lost its independence and its right to vote in the council at Delos. Naxos was the first example of what was to become a <strong style="color:var(--gold);">recurring pattern</strong> — a subject state which paid tribute.
+    </p>
+  </div>
+</div>
+
+<!-- SLIDE 9 — Split: image right (Caria/Lycia) -->
+<div class="slide slide-split img-right">
+  <div class="split-image">
+    <img src="delian-league-activities-assets/image2.jpg" alt="Operations in Caria and Lycia">
+  </div>
+  <div class="split-text">
+    <h2 class="anim">Operations in Caria and Lycia</h2>
+    <p class="anim anim-delay-1">The coasts of Caria and Lycia were still in Persian hands. According to Plutarch, <strong>Cimon sacked or destroyed some cities and induced others to revolt or annexed them</strong>, until not a single Persian soldier was left on the mainland of Asia Minor from Ionia to Pamphylia.</p>
+    <p class="anim anim-delay-2" style="font-style:italic; color: var(--gold); margin-top: clamp(8px,1.2vh,16px);">&ldquo;Cimon sacked or destroyed some cities and induced others to revolt or annexed them, until not a single Persian soldier was left on the mainland of Asia Minor from Ionia to Pamphylia.&rdquo;<br><span style="font-style:normal; font-size: clamp(0.65rem,0.9vw,0.85rem); color: rgba(250,248,242,0.6);">Plutarch, <em>Cimon</em> 12</span></p>
+    <p class="anim anim-delay-3">The Greek city of <strong>Phaselis</strong> refused to revolt against Persia and join Cimon's campaign. Cimon attacked Phaselis and devastated the countryside until the population agreed to be enrolled in the League.</p>
+  </div>
+</div>
+
+<!-- SLIDE 10 — Quote: Battle of Eurymedon -->
+<div class="slide slide-quote">
+  <div class="quote-block anim">
+    <div class="quote-mark">&ldquo;</div>
+    <blockquote>...he threw back the barbarians with great slaughter and captured the army and its camp which was full of all kinds of spoil.</blockquote>
+    <div class="attribution">Plutarch, <em>Cimon</em> 13</div>
+  </div>
+  <div style="max-width:850px; margin-top: clamp(18px, 2.5vh, 30px);">
+    <p class="anim anim-delay-1" style="font-size: clamp(0.75rem,1.1vw,0.95rem); color: var(--cream); line-height:1.65; font-weight:300; text-align:left;">
+      <span style="color: var(--gold); font-weight:600;">The Battle of Eurymedon — 468 BC</span><br>
+      This was the most ambitious and costly campaign ever undertaken by the League fleet. Cimon not only inflicted a crushing defeat on the Persian navy but on the same day defeated the land army. He then intercepted and captured eighty Phoenician ships from Cyprus sent as reinforcements.
+    </p>
+  </div>
+</div>
+
+<!-- SLIDE 11 — Text-Heavy: Outcomes of Eurymedon -->
+<div class="slide slide-text">
+  <h2 class="anim">Outcomes of the Battle of Eurymedon</h2>
+  <div class="text-body">
+    <ul>
+      <li class="anim anim-delay-1">This battle eliminated further serious <strong>Persian threats in the Aegean</strong>.</li>
+      <li class="anim anim-delay-1"><strong>Cimon's reputation</strong> was enhanced as this was his greatest victory.</li>
+      <li class="anim anim-delay-2">From the captured spoils the Athenians made rich dedications to the gods and began constructing the <strong>southern wall of the Acropolis and the Long Walls of Athens</strong> linking the city with the port of Piraeus.</li>
+      <li class="anim anim-delay-3">This victory justified the <strong>Delian League's existence</strong> up to this point (468 BC). The members had carried out the League's objectives of freeing and protecting the Greeks and attacking the Persians' possessions.</li>
+      <li class="anim anim-delay-4">Some member city-states felt the Delian League had achieved its main objective, and might have thought the price of membership was now too high.</li>
+      <li class="anim anim-delay-5"><strong>What direction would the League take now?</strong> In the years after 468 BC, the League, under the influence of Athens, took more actions against its own members and came into conflict with some of the Peloponnesian powers.</li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- end deck -->
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <img src="" alt="Enlarged image" id="lightboxImg">
+</div>
+
+<!-- Help Overlay -->
+<div class="help-overlay" id="helpOverlay">
+  <h3>Keyboard Shortcuts</h3>
+  <div class="keys">
+    <div class="key-row"><kbd>&rarr;</kbd> <span>Next slide</span></div>
+    <div class="key-row"><kbd>&larr;</kbd> <span>Previous slide</span></div>
+    <div class="key-row"><kbd>Space</kbd> <span>Next slide</span></div>
+    <div class="key-row"><kbd>Home</kbd> <span>First slide</span></div>
+    <div class="key-row"><kbd>End</kbd> <span>Last slide</span></div>
+    <div class="key-row"><kbd>Esc</kbd> <span>Close lightbox / help</span></div>
+    <div class="key-row"><kbd>?</kbd> <span>Toggle this help</span></div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  const progressBar = document.getElementById('progressBar');
+  const counter = document.getElementById('slideCounter');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const helpOverlay = document.getElementById('helpOverlay');
+
+  function goTo(n) {
+    if (n < 0 || n >= total) return;
+    slides[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    updateUI();
+    triggerAnimations();
+  }
+
+  function updateUI() {
+    progressBar.style.width = ((current + 1) / total * 100) + '%';
+    counter.textContent = (current + 1) + ' / ' + total;
+  }
+
+  function triggerAnimations() {
+    const els = slides[current].querySelectorAll('.anim');
+    els.forEach(el => el.classList.remove('visible'));
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        els.forEach(el => el.classList.add('visible'));
+      });
+    });
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (lightbox.classList.contains('active')) {
+      if (e.key === 'Escape' || e.key === ' ') { lightbox.classList.remove('active'); e.preventDefault(); return; }
+    }
+    if (helpOverlay.classList.contains('active')) {
+      if (e.key === 'Escape' || e.key === '?') { helpOverlay.classList.remove('active'); e.preventDefault(); return; }
+    }
+    switch(e.key) {
+      case 'ArrowRight': case ' ': goTo(current + 1); e.preventDefault(); break;
+      case 'ArrowLeft': goTo(current - 1); e.preventDefault(); break;
+      case 'Home': goTo(0); e.preventDefault(); break;
+      case 'End': goTo(total - 1); e.preventDefault(); break;
+      case '?': helpOverlay.classList.toggle('active'); e.preventDefault(); break;
+      case 'Escape': break;
+    }
+  });
+
+  document.querySelectorAll('.split-image img, .slide-full-image .image-wrapper img').forEach(img => {
+    img.addEventListener('click', function() {
+      lightboxImg.src = this.src;
+      lightbox.classList.add('active');
+    });
+  });
+  lightbox.addEventListener('click', function() { lightbox.classList.remove('active'); });
+
+  updateUI();
+  triggerAnimations();
+})();
+</script>
+</body>
+</html>
