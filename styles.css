@@ -1182,6 +1182,49 @@ strong { font-weight: 700; }
 }
 
 /* ============================================================
+   XERXES MIND MAP
+   ============================================================ */
+.xerxes-map { margin: 2rem 0; font-family: var(--font-display); }
+.xerxes-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 1.5rem; }
+.xerxes-portrait {
+  width: 140px; height: 140px; border-radius: 50%;
+  object-fit: cover; object-position: center 15%;
+  border: 4px solid var(--bg-nav);
+  box-shadow: 0 4px 16px rgba(27,42,74,0.15);
+  margin-bottom: 1rem;
+}
+.xerxes-label { font-weight: 800; font-size: 1.1rem; text-align: center; color: var(--text-primary); }
+.xerxes-connector { display: flex; justify-content: center; padding: 0.4rem 0; }
+.xerxes-connector .line { width: 2px; height: 20px; background: var(--border); }
+.xerxes-reasons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.xerxes-reason {
+  background: var(--bg-card); border-radius: 8px;
+  padding: 1.1rem 1.25rem; text-align: center;
+  font-size: 0.9rem; font-weight: 600; color: var(--text-body);
+  line-height: 1.5; border-top: 3px solid var(--reason-accent, var(--accent));
+  box-shadow: 0 1px 4px rgba(27,42,74,0.06);
+}
+.xr-1 { --reason-accent: #2A6F97; }
+.xr-2 { --reason-accent: #3D6B5A; }
+.xr-3 { --reason-accent: #C4872A; }
+.xr-4 { --reason-accent: #8a5ad9; }
+.xr-5 { --reason-accent: #d94f3a; }
+.xr-6 { --reason-accent: #2ab5a0; }
+.xr-7 { --reason-accent: #1B2A4A; }
+.xerxes-result {
+  background: var(--bg-nav); color: #fff;
+  font-weight: 800; font-size: 1.15rem; text-align: center;
+  padding: 1rem 2rem; border-radius: 8px;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  max-width: 360px; margin: 0 auto;
+}
+@media (max-width: 700px) {
+  .xerxes-reasons { grid-template-columns: 1fr; }
+  .xerxes-reason { grid-column: auto !important; }
+  .xerxes-portrait { width: 110px; height: 110px; }
+}
+
+/* ============================================================
    TABBED PANELS
    ============================================================ */
 .tab-container {
