@@ -64,11 +64,14 @@ body {
 .topnav-brand {
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 0.95rem;
+  font-size: 1.15rem;
   color: #FFFFFF;
   text-decoration: none;
   letter-spacing: -0.01em;
   white-space: nowrap;
+}
+.topnav-brand:hover {
+  color: #FFFFFF;
 }
 .topnav-brand span {
   color: var(--accent-warm);
