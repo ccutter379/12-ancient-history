@@ -516,6 +516,20 @@ document.querySelectorAll('h2, blockquote, .activity-box, .card, .presentations-
       if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current - 1); }
       if (e.key === 'ArrowRight') { e.preventDefault(); goTo(current + 1); }
     });
+
+    // Connect carousel images to the existing lightbox
+    slides.forEach(slide => {
+      const img = slide.querySelector('img');
+      if (img && typeof openLightbox === 'function') {
+        img.setAttribute('tabindex', '0');
+        img.setAttribute('role', 'button');
+        img.setAttribute('aria-label', 'Enlarge: ' + (img.alt || 'image'));
+        img.addEventListener('click', () => openLightbox(img));
+        img.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(img); }
+        });
+      }
+    });
   });
   </script>
 <script>
