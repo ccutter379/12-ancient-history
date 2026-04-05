@@ -883,6 +883,291 @@ strong { font-weight: 700; }
 }
 
 /* ============================================================
+   PAN-HELLENIC MIND MAP
+   ============================================================ */
+.panhellenic { margin: 2rem 0; font-family: var(--font-display); }
+.panhellenic-hub {
+  width: 180px; height: 180px; border-radius: 50%;
+  border: 3px solid rgba(100, 150, 200, 0.5);
+  background: var(--bg-card);
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; font-weight: 800; font-size: 1.1rem;
+  color: var(--white); margin: 0 auto 1.5rem;
+  line-height: 1.3; padding: 1.25rem;
+}
+.panhellenic-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+}
+.panhellenic-item {
+  background: var(--bg-card); border-radius: 8px;
+  padding: 1rem 1.25rem; border-top: 3px solid var(--ph-accent);
+}
+.panhellenic-item h4 {
+  font-size: 0.95rem; font-weight: 700;
+  margin: 0 0 0.5rem; color: var(--ph-accent); font-style: normal;
+}
+.panhellenic-item p { font-size: 0.85rem; color: var(--cream); margin: 0; line-height: 1.5; }
+.ph-poetry { --ph-accent: #e88a2d; }
+.ph-visual-arts { --ph-accent: #e07a8a; }
+.ph-religion { --ph-accent: #d94f8a; }
+.ph-customs { --ph-accent: #8a6abf; }
+.ph-myths { --ph-accent: #5aad5a; }
+.ph-language { --ph-accent: #4a90c4; }
+
+/* ============================================================
+   SOURCE CHEVRONS
+   ============================================================ */
+.source-chevrons { margin: 2rem 0; display: flex; flex-direction: column; gap: 0.75rem; }
+.source-chevron-item { display: flex; border-radius: 8px; overflow: hidden; background: var(--bg-card); border: 1px solid rgba(255,255,255,0.06); }
+.source-chevron-label {
+  min-width: 150px; max-width: 180px; padding: 1rem 1.25rem;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; font-weight: 800; font-size: 0.88rem;
+  color: #fff; line-height: 1.3; flex-shrink: 0;
+}
+.source-chevron-content { padding: 0.75rem 1.25rem; flex: 1; display: flex; align-items: center; }
+.source-chevron-content ul { margin: 0; padding-left: 1.25rem; }
+.source-chevron-content li { font-size: 0.88rem; color: var(--cream); margin-bottom: 0.25rem; }
+.sc-1 .source-chevron-label { background: #1a4a7a; }
+.sc-2 .source-chevron-label { background: #1a5268; }
+.sc-3 .source-chevron-label { background: #1a5a5a; }
+.sc-4 .source-chevron-label { background: #1e6650; }
+.sc-5 .source-chevron-label { background: #267248; }
+.sc-6 .source-chevron-label { background: #308040; }
+
+/* ============================================================
+   HUB-SPOKE DIAGRAM (reusable)
+   ============================================================ */
+.hub-spoke { margin: 2rem 0; font-family: var(--font-display); }
+.hub-spoke-center {
+  width: 200px; height: 200px; border-radius: 50%;
+  background: var(--bg-card); border: 3px solid rgba(100, 150, 200, 0.5);
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; font-weight: 800; font-size: 1.05rem;
+  color: var(--white); margin: 0 auto 1.5rem;
+  line-height: 1.3; padding: 1.5rem;
+}
+.hub-spoke-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;
+}
+.hub-spoke-item {
+  background: var(--bg-card); border-radius: 8px;
+  padding: 1rem 1.25rem; text-align: center;
+  border-top: 3px solid var(--hs-accent, var(--gold));
+  font-size: 0.9rem; color: var(--cream); line-height: 1.5;
+  font-weight: 600;
+}
+
+/* ============================================================
+   RADIAL DIAGRAM (center box + surrounding cards)
+   ============================================================ */
+.radial-diagram { margin: 2rem 0; font-family: var(--font-display); }
+.radial-hub {
+  background: #1a3a6a; border: 2px solid #2a5a9a;
+  color: #fff; font-weight: 800; font-size: 1rem;
+  text-align: center; padding: 1.25rem 1.5rem;
+  border-radius: 8px; max-width: 360px;
+  margin: 0 auto 1rem; text-transform: uppercase;
+  letter-spacing: 0.03em; line-height: 1.4;
+}
+.radial-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+}
+.radial-item {
+  background: var(--bg-card); border-radius: 8px;
+  padding: 1rem 1.25rem; font-size: 0.88rem;
+  line-height: 1.55; color: var(--cream);
+  border-left: 3px solid var(--ri-accent, var(--gold));
+}
+.ri-red { --ri-accent: #d94f3a; }
+.ri-blue { --ri-accent: #3a7ad9; }
+.ri-teal { --ri-accent: #2ab5a0; }
+.ri-pink { --ri-accent: #d94f8a; }
+.ri-orange { --ri-accent: #e88a2d; }
+.ri-purple { --ri-accent: #8a5ad9; }
+
+/* ============================================================
+   CAUSES DIAGRAM (long-term / short-term)
+   ============================================================ */
+.causes-diagram { margin: 2rem 0; font-family: var(--font-display); }
+.causes-label {
+  background: #1a5a8a; color: #fff;
+  font-weight: 800; font-size: 1rem;
+  text-align: center; padding: 0.75rem 1.25rem;
+  border-radius: 8px; margin: 0.75rem 0;
+}
+.causes-connector { display: flex; justify-content: center; padding: 0.25rem 0; }
+.causes-connector .arrow { width: 2px; height: 20px; background: var(--muted); }
+.causes-explanation {
+  background: var(--bg-card); border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 8px; padding: 1.25rem 1.5rem;
+  text-align: center; font-size: 0.92rem; font-weight: 600;
+  color: var(--cream); line-height: 1.6; margin: 0.75rem 0;
+}
+.causes-row {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1rem; margin: 0.75rem 0;
+}
+.causes-box {
+  background: var(--bg-card); border-radius: 8px;
+  padding: 1rem 1.25rem; font-size: 0.88rem;
+  line-height: 1.55; color: var(--cream);
+}
+.causes-box.long-term { border-top: 3px solid #e88a2d; }
+.causes-box.short-term { border-top: 3px solid #4a9ad9; }
+
+/* ============================================================
+   SPLIT DIAGRAM (two sections, e.g., Greece/Persia)
+   ============================================================ */
+.split-diagram { margin: 2rem 0; font-family: var(--font-display); }
+.split-diagram-title {
+  background: #1a3a6a; border: 2px solid #2a5a9a;
+  color: #fff; font-weight: 800; font-size: 1rem;
+  text-align: center; padding: 1rem 1.5rem;
+  border-radius: 8px; line-height: 1.4;
+  text-transform: uppercase; margin-bottom: 1rem;
+}
+.split-diagram-sections {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+}
+.split-section-label {
+  font-weight: 800; font-size: 0.95rem;
+  text-align: center; padding: 0.6rem 1rem;
+  border-radius: 8px; margin-bottom: 0.75rem; color: #fff;
+}
+.split-section-label.greece { background: var(--gold); color: #1a1a1a; }
+.split-section-label.persia { background: #1a5a8a; }
+.split-section-items { display: flex; flex-direction: column; gap: 0.5rem; }
+.split-section-item {
+  background: var(--bg-card); border-radius: 8px;
+  padding: 0.75rem 1rem; font-size: 0.88rem;
+  color: var(--cream); text-align: center;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* ============================================================
+   QUADRANT GRID (2x2 with label above)
+   ============================================================ */
+.quadrant-grid { margin: 2rem 0; font-family: var(--font-display); }
+.quadrant-grid-inner {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-radius: 8px; overflow: hidden;
+}
+.quadrant-cell {
+  padding: 1.25rem 1.5rem; color: #fff;
+}
+.quadrant-cell h4 { font-size: 1rem; font-weight: 800; margin: 0 0 0.5rem; font-style: normal; color: #fff; }
+.quadrant-cell ul { margin: 0.25rem 0 0 1.25rem; }
+.quadrant-cell li { font-size: 0.88rem; margin-bottom: 0.3rem; }
+.qc-1 { background: rgba(210, 120, 40, 0.3); border-right: 1px solid rgba(255,255,255,0.08); border-bottom: 1px solid rgba(255,255,255,0.08); }
+.qc-2 { background: rgba(70, 110, 50, 0.3); border-bottom: 1px solid rgba(255,255,255,0.08); }
+.qc-3 { background: rgba(110, 80, 170, 0.3); border-right: 1px solid rgba(255,255,255,0.08); }
+.qc-4 { background: rgba(50, 80, 150, 0.3); }
+.quadrant-center {
+  background: var(--bg-card); border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 8px; padding: 0.75rem 1.5rem;
+  font-weight: 800; font-size: 1rem; color: var(--white);
+  text-align: center; line-height: 1.3;
+  max-width: 280px; margin: 0 auto 1rem;
+}
+
+/* ============================================================
+   COLUMN CARDS (heading + sub-cards per column)
+   ============================================================ */
+.column-cards { margin: 2rem 0; font-family: var(--font-display); display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.column-card-group { display: flex; flex-direction: column; gap: 0.75rem; }
+.column-card-heading {
+  font-weight: 800; font-size: 0.95rem; color: #fff;
+  padding: 1rem 1.25rem; border-radius: 8px;
+  text-align: center; line-height: 1.3;
+}
+.column-card-body {
+  background: var(--bg-card); border-radius: 8px;
+  padding: 1rem 1.25rem; font-size: 0.85rem;
+  color: var(--cream); line-height: 1.55;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.cch-blue { background: #1a4a7a; }
+.cch-teal { background: #1a5a5a; }
+.cch-green { background: #2a6a3a; }
+
+/* ============================================================
+   FLOW SEQUENCE (Mardonius flowchart)
+   ============================================================ */
+.flow-sequence { margin: 2rem 0; font-family: var(--font-display); }
+.flow-title {
+  background: #1a3a6a; border: 2px solid #2a5a9a;
+  color: #fff; font-weight: 800; font-size: 1.05rem;
+  text-align: center; padding: 0.75rem 1.25rem;
+  border-radius: 8px; margin-bottom: 0.5rem; line-height: 1.4;
+}
+.flow-step {
+  max-width: 480px; margin: 0 auto;
+  background: var(--bg-card); border-radius: 8px;
+  padding: 0.9rem 1.25rem; font-size: 0.88rem;
+  color: var(--cream); line-height: 1.5; text-align: center;
+  border-left: 3px solid var(--fs-accent, var(--gold));
+}
+.flow-step-wide { max-width: 650px; }
+.flow-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+  max-width: 650px; margin: 0 auto;
+}
+.flow-row-3 {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;
+}
+.flow-connector { display: flex; justify-content: center; padding: 0.3rem 0; }
+.flow-connector .arrow { width: 2px; height: 16px; background: var(--muted); }
+.fs-blue { --fs-accent: #1a4a7a; }
+.fs-green { --fs-accent: #2a6a3a; }
+.fs-purple { --fs-accent: #7a3a9a; }
+.fs-orange { --fs-accent: #c87a20; }
+.fs-red { --fs-accent: #c83a3a; }
+.fs-teal { --fs-accent: #2ab5a0; }
+
+/* ============================================================
+   RESULTS DIAGRAM (Artemesium/Thermopylae style)
+   ============================================================ */
+.results-diagram { margin: 2rem 0; font-family: var(--font-display); }
+.results-hub {
+  background: var(--bg-card); border: 2px solid rgba(255,255,255,0.15);
+  color: var(--white); font-weight: 800; font-size: 1rem;
+  text-align: center; padding: 0.75rem 1.25rem;
+  border-radius: 8px; margin: 0.75rem 0;
+  text-transform: uppercase; letter-spacing: 0.03em;
+}
+.results-row {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+  margin: 0.75rem 0;
+}
+.results-item {
+  background: var(--bg-card); border-radius: 8px;
+  padding: 1rem 1.25rem; font-size: 0.88rem;
+  line-height: 1.55; color: var(--cream);
+  border-left: 3px solid var(--ri-accent, var(--gold));
+}
+
+/* ============================================================
+   RESPONSIVE — all diagram components
+   ============================================================ */
+@media (max-width: 700px) {
+  .panhellenic-grid,
+  .radial-grid,
+  .causes-row,
+  .split-diagram-sections,
+  .column-cards,
+  .flow-row,
+  .flow-row-3,
+  .results-row { grid-template-columns: 1fr; }
+  .panhellenic-hub,
+  .hub-spoke-center { width: 150px; height: 150px; font-size: 1rem; }
+  .quadrant-grid-inner { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .source-chevron-item { flex-direction: column; }
+  .source-chevron-label { min-width: auto; max-width: none; padding: 0.75rem; }
+}
+
+/* ============================================================
    SECTION NAV (right-side up/down arrows)
    ============================================================ */
 .section-nav {
