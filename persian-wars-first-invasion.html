@@ -180,31 +180,42 @@
 
         <hr>
 
-        <!-- Embedded presentation content: Marathon Battle Summary -->
+        <!-- Marathon Battle Phases — Tabbed layout -->
         <h3>Marathon &mdash; Battle Phases</h3>
 
-        <img src="slides/marathon-battle-summary-assets/image1.jpeg" alt="Marathon battle title image" class="content-image">
-        <img src="slides/marathon-battle-summary-assets/image2.jpg" alt="The Battle of Marathon" class="content-image">
-
-        <h3>Phase 1 &mdash; Formation</h3>
-        <p>The Athenians were drawn up in formation: on the left wing were the Plataeans, Callimachus commanded the right wing while Miltiades took control of the &ldquo;thinner lines&rdquo; of the centre.</p>
-        <img src="slides/marathon-battle-summary-assets/image3.png" alt="Diagram of Greek formation at Marathon — Plataeans on the left, Callimachus on the right, Miltiades in the centre" class="content-image">
-
-        <h3>Phase 2 &mdash; The Charge</h3>
-        <p>The Athenians charged at double speed.</p>
-        <img src="slides/marathon-battle-summary-assets/image4.png" alt="Diagram showing the Athenian charge at Marathon" class="content-image">
-
-        <h3>Phase 3 &mdash; The Centre Buckles</h3>
-        <p>The Athenian&rsquo;s weaker centre was pushed back but the wings held firm.</p>
-        <p>The Persian wings fled to their ships.</p>
-        <img src="slides/marathon-battle-summary-assets/image5.png" alt="Diagram showing the Athenian centre pushed back while wings hold firm" class="content-image">
-
-        <h3>Phase 4 &mdash; Encirclement and Rout</h3>
-        <p>As the Persian centre pushed deeper into the Athenian centre, they became surrounded and trapped by the Athenian&rsquo;s wings. The Persian forces were routed.</p>
-        <p>The Athenians pursued the other Persians back to their ships and managed to capture seven ships.</p>
-        <p>The Persian fleet sailed south to Athens and anchored off Phaleron.</p>
-        <p>The Athenians quickly marched south and took up a position on Mt Lycabettus. After a short time, the Persians returned home.</p>
-        <img src="slides/marathon-battle-summary-assets/image6.png" alt="Diagram showing the encirclement and rout of Persian forces at Marathon" class="content-image">
+        <div class="tab-container">
+          <div class="tab-nav" role="tablist">
+            <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="tab-overview" id="btn-overview">Overview</button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-phase1" id="btn-phase1">Phase 1: Formation</button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-phase2" id="btn-phase2">Phase 2: The Charge</button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-phase3" id="btn-phase3">Phase 3: Centre Buckles</button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-phase4" id="btn-phase4">Phase 4: Encirclement</button>
+          </div>
+          <div class="tab-panel active" role="tabpanel" id="tab-overview" aria-labelledby="btn-overview">
+            <img src="slides/marathon-battle-summary-assets/image1.jpeg" alt="Marathon battle title image">
+            <img src="slides/marathon-battle-summary-assets/image2.jpg" alt="The Battle of Marathon" style="margin-top: 1rem;">
+          </div>
+          <div class="tab-panel" role="tabpanel" id="tab-phase1" aria-labelledby="btn-phase1">
+            <p>The Athenians were drawn up in formation: on the left wing were the Plataeans, Callimachus commanded the right wing while Miltiades took control of the &ldquo;thinner lines&rdquo; of the centre.</p>
+            <img src="slides/marathon-battle-summary-assets/image3.png" alt="Diagram of Greek formation at Marathon — Plataeans on the left, Callimachus on the right, Miltiades in the centre">
+          </div>
+          <div class="tab-panel" role="tabpanel" id="tab-phase2" aria-labelledby="btn-phase2">
+            <p>The Athenians charged at double speed.</p>
+            <img src="slides/marathon-battle-summary-assets/image4.png" alt="Diagram showing the Athenian charge at Marathon">
+          </div>
+          <div class="tab-panel" role="tabpanel" id="tab-phase3" aria-labelledby="btn-phase3">
+            <p>The Athenian&rsquo;s weaker centre was pushed back but the wings held firm.</p>
+            <p>The Persian wings fled to their ships.</p>
+            <img src="slides/marathon-battle-summary-assets/image5.png" alt="Diagram showing the Athenian centre pushed back while wings hold firm">
+          </div>
+          <div class="tab-panel" role="tabpanel" id="tab-phase4" aria-labelledby="btn-phase4">
+            <p>As the Persian centre pushed deeper into the Athenian centre, they became surrounded and trapped by the Athenian&rsquo;s wings. The Persian forces were routed.</p>
+            <p>The Athenians pursued the other Persians back to their ships and managed to capture seven ships.</p>
+            <p>The Persian fleet sailed south to Athens and anchored off Phaleron.</p>
+            <p>The Athenians quickly marched south and took up a position on Mt Lycabettus. After a short time, the Persians returned home.</p>
+            <img src="slides/marathon-battle-summary-assets/image6.png" alt="Diagram showing the encirclement and rout of Persian forces at Marathon">
+          </div>
+        </div>
 
         <div class="video-embed">
           <iframe src="https://www.youtube-nocookie.com/embed/V3b6M5CzYTE" allowfullscreen loading="lazy" title="Video: Decisive Battles — Battle of Marathon"></iframe>
@@ -477,6 +488,21 @@ document.querySelectorAll('h2, blockquote, .activity-box, .card, .presentations-
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1 });
   document.querySelectorAll('.timeline-item').forEach(el => tlObs.observe(el));
+
+  // Tabbed panels
+  document.querySelectorAll('.tab-container').forEach(container => {
+    const btns = container.querySelectorAll('.tab-btn');
+    const panels = container.querySelectorAll('.tab-panel');
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+        panels.forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        container.querySelector('#' + btn.getAttribute('aria-controls')).classList.add('active');
+      });
+    });
+  });
 
   // Image carousels
   document.querySelectorAll('.image-carousel').forEach(carousel => {
